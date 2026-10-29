@@ -1,9 +1,9 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-    import json
-    import pychromecast
-    from pychromecast.controllers.spotify import SpotifyController
+import json
+import pychromecast
+from pychromecast.controllers.spotify import SpotifyController
 
-    class Handler(BaseHTTPRequestHandler):
+class Handler(BaseHTTPRequestHandler):
         def do_OPTIONS(self):
             self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')
@@ -54,7 +54,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
                 print(f"Erreur de réveil : {e}")
                 return False
 
-    if __name__ == '__main__':
+if __name__ == '__main__':
         print("Bridge Spotify démarré sur http://127.0.0.1:8080")
         httpd = HTTPServer(('127.0.0.1', 8080), Handler)
         httpd.serve_forever()

@@ -54,7 +54,7 @@ class Handler(BaseHTTPRequestHandler):
                 print(f"Erreur de réveil : {e}")
                 return False
 
-    if __name__ == '__main__':
+if __name__ == '__main__':
         print("Bridge Spotify démarré sur http://127.0.0.1:8080")
         httpd = HTTPServer(('127.0.0.1', 8080), Handler)
         httpd.serve_forever()

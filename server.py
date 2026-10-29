@@ -1,5 +1,4 @@
-    cat << 'EOF' > server.py
-    from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
     import json
     import pychromecast
     from pychromecast.controllers.spotify import SpotifyController

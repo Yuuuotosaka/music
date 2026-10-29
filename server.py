@@ -1,6 +1,8 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
+import time
 import pychromecast
+from zeroconf import Zeroconf
 
 SPOTIFY_APP_ID = "CC32E027"
 
@@ -17,11 +19,11 @@ class Handler(BaseHTTPRequestHandler):
         body = self.rfile.read(content_length)
         data = json.loads(body.decode('utf-8'))
 
-        speaker_name = data.get('speaker')
+        speaker_name = data.get('speaker', '')
         token = data.get('token')
 
         print(f"Demande de réveil pour : {speaker_name}")
-        success = self.wake_speaker(speaker_name, token)
+        success = self.wake_speaker(speaker_name)
 
         self.send_response(200 if success else 500)
         self.send_header('Content-Type', 'application/json')
@@ -29,32 +31,54 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({'ok': success}).encode('utf-8'))
 
-    def wake_speaker(self, name, token=None):
+    def wake_speaker(self, name):
+        zconf = Zeroconf()
+        browser = None
+        cast = None
         try:
-            casts, browser = pychromecast.get_listed_chromecasts(friendly_names=[name])
-            if not casts:
-                all_casts, b2 = pychromecast.get_chromecasts()
-                casts = [c for c in all_casts if c.name.lower() == name.lower()]
-                pychromecast.discovery.stop_discovery(b2)
+            # 1. Découverte avec instance Zeroconf dédiée
+            casts, browser = pychromecast.get_chromecasts(zconf=zconf, timeout=5)
+            
+            # Recherche insensible à la casse
+            target = next((c for c in casts if c.name.lower() == name.strip().lower()), None)
 
-            pychromecast.discovery.stop_discovery(browser)
-
-            if not casts:
-                print(f"Enceinte '{name}' introuvable sur le Wi-Fi.")
+            if not target:
+                print(f"Appareil '{name}' introuvable sur le réseau local.")
+                print(f"Appareils vus : {[c.name for c in casts]}")
                 return False
 
-            cast = casts[0]
-            cast.wait()
+            cast = target
+            print(f"Connexion au Nest '{cast.name}' ({cast.cast_type})...")
             
-            # Lancement direct de Spotify via son identifiant Chromecast
+            # 2. Attente de la stabilisation du socket TCP
+            cast.wait(timeout=6)
+
+            # 3. Lancement de l'application Spotify
             cast.start_app(SPOTIFY_APP_ID)
-            cast.disconnect()
-            
-            print(f"Enceinte '{name}' réveillée avec succès !")
+            print(f"Spotify lancé avec succès sur '{cast.name}' !")
+            time.sleep(1)
             return True
+
         except Exception as e:
-            print(f"Erreur de réveil : {e}")
+            print(f"Erreur de réveil pour '{name}' : {e}")
             return False
+
+        finally:
+            # 4. Fermeture propre : on libère le Chromecast, puis le navigateur, puis Zeroconf
+            if cast:
+                try:
+                    cast.disconnect()
+                except Exception:
+                    pass
+            if browser:
+                try:
+                    pychromecast.discovery.stop_discovery(browser)
+                except Exception:
+                    pass
+            try:
+                zconf.close()
+            except Exception:
+                pass
 
 if __name__ == '__main__':
     print("Bridge Spotify démarré sur http://127.0.0.1:8080")

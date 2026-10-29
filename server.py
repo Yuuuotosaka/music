@@ -2,8 +2,28 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import time
 import pychromecast
+from pychromecast.controllers import BaseController
 
 SPOTIFY_APP_ID = "CC32E027"
+SPOTIFY_NAMESPACE = "urn:x-cast:com.spotify.chromecast.secure.v1"
+
+class EmbeddedSpotifyController(BaseController):
+    """Contrôleur de session Spotify Cast minimaliste."""
+    def __init__(self, access_token=None):
+        super().__init__(SPOTIFY_NAMESPACE, SPOTIFY_APP_ID)
+        self.access_token = access_token
+
+    def launch_spotify(self):
+        def launched():
+            # Initialisation de la session Spotify sur l'enceinte
+            payload = {
+                "type": "setCredentials",
+                "credentials": self.access_token or ""
+            }
+            self.send_message(payload)
+
+        self.launch(callback_function=launched)
+
 
 class Handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
@@ -22,7 +42,7 @@ class Handler(BaseHTTPRequestHandler):
         token = data.get('token')
 
         print(f"Demande de réveil pour : {speaker_name}")
-        success = self.wake_speaker(speaker_name)
+        success = self.wake_speaker(speaker_name, token)
 
         self.send_response(200 if success else 500)
         self.send_header('Content-Type', 'application/json')
@@ -30,7 +50,7 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({'ok': success}).encode('utf-8'))
 
-    def wake_speaker(self, name):
+    def wake_speaker(self, name, token=None):
         browser = None
         cast = None
         try:
@@ -46,9 +66,14 @@ class Handler(BaseHTTPRequestHandler):
             cast = target
             print(f"Connexion à '{cast.name}'...")
             cast.wait(timeout=6)
-            cast.start_app(SPOTIFY_APP_ID)
-            print(f"Spotify lancé avec succès sur '{cast.name}' !")
-            time.sleep(1)
+
+            # Instanciation et enregistrement du contrôleur Spotify
+            sp = EmbeddedSpotifyController(access_token=token)
+            cast.register_handler(sp)
+            sp.launch_spotify()
+
+            print(f"Session Spotify initialisée sur '{cast.name}' !")
+            time.sleep(1.5)
             return True
 
         except Exception as e:
@@ -67,12 +92,17 @@ class Handler(BaseHTTPRequestHandler):
                 except Exception:
                     pass
 
+
 class ReusableHTTPServer(HTTPServer):
-    allow_reuse_address = True
+    def __init__(self, server_address, RequestHandlerClass):
+        self.allow_reuse_address = True
+        super().__init__(server_address, RequestHandlerClass, bind_and_activate=True)
+
 
 if __name__ == '__main__':
-    print("Bridge Spotify démarré sur http://127.0.0.1:8080")
-    httpd = ReusableHTTPServer(('127.0.0.1', 8080), Handler)
+    server_address = ('127.0.0.1', 8080)
+    print(f"Bridge Spotify démarré sur http://{server_address[0]}:{server_address[1]}")
+    httpd = ReusableHTTPServer(server_address, Handler)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

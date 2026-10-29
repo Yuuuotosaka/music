@@ -1,29 +1,60 @@
-    echo
-    "ZnJvbSBodHRwLnNlcnZlciBpbXBvcnQgSFRUUFNlcnZlciwgQmFzZUhUVFBSZXF1ZXN0SGFuZGxlcgppbXBvcnQganNvbgppbXBvcnQgcHljaHJvb
-    WVjYXN0CmZyb20gcHljaHJvbWVjYXN0LmNvbnRyb2xsZXJzLnNwb3RpZnkgaW1wb3J0IFNwb3RpZnlDb250cm9sbGVyCgpjbGFzcyBIYW5kbGVyKEJ
-    hc2VIVFRQUmVxdWVzdEhhbmRsZXIpOgogICAgZGVmIGRvX09QVElPTlMoc2VsZik6CiAgICAgICAgc2VsZi5zZW5kX3Jlc3BvbnNlKDIwMCkKICAgI
-    CAgICBzZWxmLnNlbmRfaGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1PcmlnaW4nLCAnKicpCiAgICAgICAgc2VsZi5zZW5kX2hlYWRlcignQWN
-    jZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcycsICdQT1NULCBHRVQsIE9QVElPTlMnKQogICAgICAgIHNlbGYuc2VuZF9oZWFkZXIoJ0FjY2Vzcy1Db
-    250cm9sLUFsbG93LUhlYWRlcnMnLCAnQ29udGVudC1UeXBlJykKICAgICAgICBzZWxmLmVuZF9oZWFkZXJzKCkKCiAgICBkZWYgZG9fUE9TVChzZWx
-    mKToKICAgICAgICBjb250ZW50X2xlbmd0aCA9IGludChzZWxmLmhlYWRlcnMuZ2V0KCdDb250ZW50LUxlbmd0aCcsIDApKQogICAgICAgIGJvZHkgP
-    SBzZWxmLnJmaWxlLnJlYWQoY29udGVudF9sZW5ndGgpCiAgICAgICAgZGF0YSA9IGpzb24ubG9hZHMoYm9keS5kZWNvZGUoJ3V0Zi04JykpCiAgICA
-    gICAgCiAgICAgICAgc3BlYWtlcl9uYW1lID0gZGF0YS5nZXQoJ3NwZWFrZXInKQogICAgICAgIHRva2VuID0gZGF0YS5nZXQoJ3Rva2VuJykKCiAgI
-    CAgICAgcHJpbnQoZidEZW1hbmRlIGRlIHJldmVpbCBwb3VyIDoge3NwZWFrZXJfbmFtZX0nKQogICAgICAgIHN1Y2Nlc3MgPSBzZWxmLndha2Vfc3B
-    lYWtlcihzcGVha2VyX25hbWUsIHRva2VuKQoKICAgICAgICBzZWxmLnNlbmRfcmVzcG9uc2UoMjAwIGlmIHN1Y2Nlc3MgZWxzZSA1MDApCiAgICAgI
-    CAgc2VsZi5zZW5kX2hlYWRlcignQ29udGVudC1UeXBlJywgJ2FwcGxpY2F0aW9uL2pzb24nKQogICAgICAgIHNlbGYuc2VuZF9oZWFkZXIoJ0FjY2V
-    zcy1Db250cm9sLUFsbG93LU9yaWdpbicsICcqJykKICAgICAgICBzZWxmLmVuZF9oZWFkZXJzKCkKCiAgICAgICAgc2VsZi53ZmlsZS53cml0ZShqc
-    29uLmR1bXBzKHsnb2snOiBzdWNjZXNzfSkuZW5jb2RlKCd1dGYtOCcpKQoKICAgIGRlZiB3YWtlX3NwZWFrZXIoc2VsZiwgbmFtZSwgdG9rZW4pOgo
-    gICAgICAgIHRyeToKICAgICAgICAgICAgY2FzdHMsIGJyb3dzZXIgPSBweWNocm9tZWNhc3QuZ2V0X2xpc3RlZF9jaHJvbWVjYXN0cyhmcmllbmRse
-    V9uYW1lcz1bbmFtZV0pCiAgICAgICAgICAgIGlmIG5vdCBjYXN0czoKICAgICAgICAgICAgICAgIGFsbF9jYXN0cywgYjIgPSBweWNocm9tZWNhc3Q
-    uZ2V0X2Nocm9tZWNhc3RzKCkKICAgICAgICAgICAgICAgIGNhc3RzID0gW2MgZm9yIGMgaW4gYWxsX2Nhc3RzIGlmIGMubmFtZS5sb3dlcigpID09I
-    G5hbWUubG93ZXIoKV0KICAgICAgICAgICAgICAgIHB5Y2hyb21lY2FzdC5kaXNjb3Zlcnkuc3RvcF9kaXNjb3ZlcnkoYjIpCiAgICAgICAgICAgIAo
-    gICAgICAgICAgICBweWNocm9tZWNhc3QuZ2V0X2Rpc2NvdmVyeSgpLnN0b3BfZGlzY292ZXJ5KCkgaWYgaGFzYXR0cihweWNocm9tZWNhc3QsICdnZ
-    XRfZGlzY292ZXJ5JykgZWxzZSBweWNocm9tZWNhc3QuZGlzY292ZXJ5LnN0b3BfZGlzY292ZXJ5KGJyb3dzZXIpCgogICAgICAgICAgICBpZiBub3Q
-    gY2FzdHM6CiAgICAgICAgICAgICAgICBwcmludChmJ0VuY2VpbnRlIHtuYW1lfSBpbnRyb3V2YWJsZSBzdXIgbGUgV2ktRmkuJykKICAgICAgICAgI
-    CAgICAgIHJldHVybiBGYWxzZQoKICAgICAgICAgICAgY2FzdCA9IGNhc3RzWzBdCiAgICAgICAgICAgIGNhc3Qud2FpdCgpCiAgICAgICAgICAgIHN
-    wID0gU3BvdGlmeUNvbnRyb2xsZXIodG9rZW4pCiAgICAgICAgICAgIGNhc3QucmVnaXN0ZXJfaGFuZGxlcihzcCkKICAgICAgICAgICAgc3AubGF1b
-    mNoX2FwcCgpCiAgICAgICAgICAgIGNhc3QuZGlzY29ubmVjdCgpCiAgICAgICAgICAgIHByaW50KGYnRW5jZWludGUge25hbWV9IHJldmVpbGxlZSB
-    hdmVjIHN1Y2NlcyAhJykKICAgICAgICAgICAgcmV0dXJuIFRydWUKICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgICAgIHBya
-    W50KGYnRXJyZXVyIGRlIHJldmVpbCA6IHtlfScpCiAgICAgICAgICAgIHJldHVybiBGYWxzZQoKaWYgX19uYW1lX18gPT0gJ19fbWFpbl9fJzoKICA
-    gIHByaW50KCdCcmlkZ2UgU3BvdGlmeSBkZW1hcnJlIHN1ciBodHRwOi8vMTI3LjAuMC4xOjgwODAnKQogICAgaHR0cGQgPSBIVFRQU2VydmVyKCgnM
-    TI3LjAuMC4xJywgODA4MCksIEhhbmRsZXIpCiAgICBodHRwZC5zZXJ2ZV9mb3JldmVyKCk=" | base64 -d > server.py
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
+import pychromecast
+from pychromecast.controllers.spotify import SpotifyController
+
+class Handler(BaseHTTPRequestHandler):
+        def do_OPTIONS(self):
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+            self.end_headers()
+
+        def do_POST(self):
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode('utf-8'))
+
+            speaker_name = data.get('speaker')
+            token = data.get('token')
+
+            print(f"Demande de réveil pour : {speaker_name}")
+            success = self.wake_speaker(speaker_name, token)
+
+            self.send_response(200 if success else 500)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({'ok': success}).encode('utf-8'))
+
+        def wake_speaker(self, name, token):
+            try:
+                casts, browser = pychromecast.get_listed_chromecasts(friendly_names=[name])
+                if not casts:
+                    all_casts, b2 = pychromecast.get_chromecasts()
+                    casts = [c for c in all_casts if c.name.lower() == name.lower()]
+                    pychromecast.discovery.stop_discovery(b2)
+
+                pychromecast.discovery.stop_discovery(browser)
+
+                if not casts:
+                    print(f"Enceinte '{name}' introuvable sur le Wi-Fi.")
+                    return False
+
+                cast = casts[0]
+                cast.wait()
+                sp = SpotifyController(token)
+                cast.register_handler(sp)
+                sp.launch_app()
+                cast.disconnect()
+                print(f"Enceinte '{name}' réveillée avec succès !")
+                return True
+            except Exception as e:
+                print(f"Erreur de réveil : {e}")
+                return False
+
+    if __name__ == '__main__':
+        print("Bridge Spotify démarré sur http://127.0.0.1:8080")
+        httpd = HTTPServer(('127.0.0.1', 8080), Handler)
+        httpd.serve_forever()

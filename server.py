@@ -1,4 +1,4 @@
-cat << 'EOF' > server.py
+    cat << 'EOF' > server.py
     from http.server import HTTPServer, BaseHTTPRequestHandler
     import json
     import pychromecast
@@ -33,7 +33,6 @@ cat << 'EOF' > server.py
             try:
                 casts, browser = pychromecast.get_listed_chromecasts(friendly_names=[name])
                 if not casts:
-                    # Recherche globale si le nom exact tarde à répondre
                     all_casts, b2 = pychromecast.get_chromecasts()
                     casts = [c for c in all_casts if c.name.lower() == name.lower()]
                     pychromecast.discovery.stop_discovery(b2)
@@ -57,7 +56,7 @@ cat << 'EOF' > server.py
                 return False
 
     if __name__ == '__main__':
-        print("Bridge Spotify démarré sur http://localhost:8080")
+        print("Bridge Spotify démarré sur http://127.0.0.1:8080")
         httpd = HTTPServer(('127.0.0.1', 8080), Handler)
         httpd.serve_forever()
     EOF

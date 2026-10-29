@@ -2,7 +2,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import time
 import pychromecast
-from zeroconf import Zeroconf
 
 SPOTIFY_APP_ID = "CC32E027"
 
@@ -32,14 +31,11 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps({'ok': success}).encode('utf-8'))
 
     def wake_speaker(self, name):
-        zconf = Zeroconf()
         browser = None
         cast = None
         try:
-            # 1. Découverte avec instance Zeroconf dédiée
-            casts, browser = pychromecast.get_chromecasts(zconf=zconf, timeout=5)
-            
-            # Recherche insensible à la casse
+            casts, browser = pychromecast.get_chromecasts(timeout=5)
+
             target = next((c for c in casts if c.name.lower() == name.strip().lower()), None)
 
             if not target:
@@ -48,12 +44,8 @@ class Handler(BaseHTTPRequestHandler):
                 return False
 
             cast = target
-            print(f"Connexion au Nest '{cast.name}' ({cast.cast_type})...")
-            
-            # 2. Attente de la stabilisation du socket TCP
+            print(f"Connexion à '{cast.name}'...")
             cast.wait(timeout=6)
-
-            # 3. Lancement de l'application Spotify
             cast.start_app(SPOTIFY_APP_ID)
             print(f"Spotify lancé avec succès sur '{cast.name}' !")
             time.sleep(1)
@@ -64,7 +56,6 @@ class Handler(BaseHTTPRequestHandler):
             return False
 
         finally:
-            # 4. Fermeture propre : on libère le Chromecast, puis le navigateur, puis Zeroconf
             if cast:
                 try:
                     cast.disconnect()
@@ -75,12 +66,15 @@ class Handler(BaseHTTPRequestHandler):
                     pychromecast.discovery.stop_discovery(browser)
                 except Exception:
                     pass
-            try:
-                zconf.close()
-            except Exception:
-                pass
+
+class ReusableHTTPServer(HTTPServer):
+    allow_reuse_address = True
 
 if __name__ == '__main__':
     print("Bridge Spotify démarré sur http://127.0.0.1:8080")
-    httpd = HTTPServer(('127.0.0.1', 8080), Handler)
-    httpd.serve_forever()
+    httpd = ReusableHTTPServer(('127.0.0.1', 8080), Handler)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nArrêt du serveur...")
+        httpd.server_close()

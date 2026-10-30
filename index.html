@@ -189,15 +189,13 @@
       return r.msg||('Erreur Spotify ('+r.status+')');
     }
 
-    /* ---------- Pont local Termux pour le réveil des enceintes ---------- */
+    /* ---------- Pont local pour le réveil des enceintes ---------- */
     async function wakeSpeakerLocal(speakerName){
-      const tk=await getToken();
-      if(!tk)return false;
       try{
         const r=await fetch('http://127.0.0.1:8080/',{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({speaker:speakerName,token:tk})
+          body:JSON.stringify({speaker:speakerName})
         });
         const d=await r.json();
         return !!(d&&d.ok);
@@ -207,7 +205,7 @@
       }
     }
 
-    /* ---------- Authentification PKCE avec renouvellement automatique ---------- */
+    /* ---------- Authentification PKCE ---------- */
     const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
     async function startAuth(){
       const v=b64(crypto.getRandomValues(new Uint8Array(64)));
@@ -331,22 +329,26 @@
     }
 
     async function activateDevice(d){
-      st.dev=d.id;LS.setItem('sp_dev',d.id);
+      st.dev=d.id;
+      LS.setItem('sp_dev',d.id);
       const isAwake=st.devices.some(dev=>dev.id===d.id);
 
       if(!isAwake){
         toast('Réveil de '+d.name+' en cours…');
         const ok=await wakeSpeakerLocal(d.name);
         if(!ok){
-          toast('Échec du réveil local (vérifiez que Termux tourne sur la tablette)');
+          toast('Échec du réveil local (vérifiez que le pont tourne)');
         }
-        await sleep(2200);
+        // Attente de 4 secondes pour que l'enceinte réveillée s'enregistre auprès de Spotify
+        await sleep(4000);
         await loadDevices(true);
       }
 
       const r=await api('/me/player','PUT',{device_ids:[d.id],play:!!st.item});
       if(!r.ok)toast(errMsg(r));
-      await sleep(600);loadDevices();poll();
+      await sleep(600);
+      loadDevices();
+      poll();
     }
 
     function syncVol(d){
@@ -441,7 +443,7 @@
         const name=(k[id]&&k[id].name)||'enceinte';
         toast('Réveil de '+name+'…');
         await wakeSpeakerLocal(name);
-        await sleep(2200);
+        await sleep(4000);
         await loadDevices(true);
       }
 

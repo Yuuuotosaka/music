@@ -1,10 +1,39 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import time
+import threading
 import pychromecast
+from pychromecast.controllers import BaseController
 
-# Son bref (1 seconde de silence MP3) pour forcer le réveil matériel immédiat du Nest
-SILENCE_MP3 = "https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3"
+SPOTIFY_APP_ID = "CC32E027"
+SPOTIFY_NAMESPACE = "urn:x-cast:com.spotify.chromecast.secure.v1"
+
+class SpotifyCastBridge(BaseController):
+    def __init__(self, access_token):
+        super().__init__(SPOTIFY_NAMESPACE, SPOTIFY_APP_ID)
+        self.access_token = access_token
+        self.launched_event = threading.Event()
+
+    def receive_message(self, message, data):
+        # Dès que l'application Spotify sur l'enceinte répond
+        if isinstance(data, dict):
+            msg_type = data.get("type")
+            if msg_type in ("setCredentials", "initialBridgeStatus", "ready"):
+                self.launched_event.set()
+        return True
+
+    def launch_and_auth(self, timeout=7):
+        def callback(*args, **kwargs):
+            # Envoi des identifiants Spotify requis par le récepteur Google Nest
+            self.send_message({
+                "type": "setCredentials",
+                "credentials": self.access_token
+            })
+            self.launched_event.set()
+
+        self.launch(callback_function=callback)
+        return self.launched_event.wait(timeout)
+
 
 class Handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
@@ -21,8 +50,10 @@ class Handler(BaseHTTPRequestHandler):
         data = json.loads(body.decode('utf-8'))
 
         speaker_name = data.get('speaker', '')
-        print(f"Demande de réveil pour : {speaker_name}")
-        success = self.wake_speaker(speaker_name)
+        token = data.get('token', '')
+
+        print(f"Demande d'initialisation Spotify pour : {speaker_name}")
+        success = self.wake_speaker(speaker_name, token)
 
         self.send_response(200 if success else 500)
         self.send_header('Content-Type', 'application/json')
@@ -31,7 +62,11 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({'ok': success}).encode('utf-8'))
 
-    def wake_speaker(self, name):
+    def wake_speaker(self, name, token):
+        if not token:
+            print("Erreur : Aucun token fourni par la page web.")
+            return False
+
         browser = None
         cast = None
         try:
@@ -46,14 +81,13 @@ class Handler(BaseHTTPRequestHandler):
             print(f"Connexion à '{cast.name}'...")
             cast.wait(timeout=6)
 
-            # 1. Réveil matériel immédiat (carillon Cast)
-            mc = cast.media_controller
-            mc.play_media(SILENCE_MP3, 'audio/mp3')
-            mc.block_until_active(timeout=4)
+            # Lancement et transmission du token à l'enceinte
+            sp = SpotifyCastBridge(token)
+            cast.register_handler(sp)
+            sp.launch_and_auth(timeout=6)
 
-            # On arrête le lecteur proprement sans forcer de start_app rejeté
-            mc.stop()
-            print(f"'{cast.name}' est réveillée et prête !")
+            print(f"'{cast.name}' authentifiée et active sur Spotify !")
+            time.sleep(1)
             return True
 
         except Exception as e:

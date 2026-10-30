@@ -34,7 +34,7 @@ class SpotifyCastBridge(BaseController):
             return self.launched_event.wait(timeout)
 
 
-    class Handler(BaseHTTPRequestHandler):
+class Handler(BaseHTTPRequestHandler):
         def do_OPTIONS(self):
             self.send_response(200)
             self.send_header('Access-Control-Allow-Origin', '*')

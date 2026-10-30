@@ -1,43 +1,19 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import time
-import threading
 import pychromecast
-from pychromecast.controllers import BaseController
 
+# Son bref (1 seconde de silence MP3) pour forcer le réveil matériel immédiat du Nest
+SILENCE_MP3 = "https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3"
 SPOTIFY_APP_ID = "CC32E027"
-SPOTIFY_NAMESPACE = "urn:x-cast:com.spotify.chromecast.secure.v1"
-
-class EmbeddedSpotifyController(BaseController):
-    """Contrôleur de session Spotify Cast minimaliste."""
-    def __init__(self, access_token=None):
-        super().__init__(SPOTIFY_NAMESPACE, SPOTIFY_APP_ID)
-        self.access_token = access_token
-        self.is_ready = threading.Event()
-
-    def launch_spotify(self, timeout=5):
-        def launched(*args, **kwargs):
-            try:
-                # args[0] est un booléen indiquant si le lancement Cast a réussi
-                payload = {
-                    "type": "setCredentials",
-                    "credentials": self.access_token or ""
-                }
-                self.send_message(payload)
-            finally:
-                self.is_ready.set()
-
-        self.launch(callback_function=launched)
-        # On attend que le message de credentials soit envoyé avant de couper la socket
-        return self.is_ready.wait(timeout)
-
 
 class Handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Request-Private-Network')
+        self.send_header('Access-Control-Allow-Private-Network', 'true')
         self.end_headers()
 
     def do_POST(self):
@@ -46,27 +22,25 @@ class Handler(BaseHTTPRequestHandler):
         data = json.loads(body.decode('utf-8'))
 
         speaker_name = data.get('speaker', '')
-        token = data.get('token')
-
         print(f"Demande de réveil pour : {speaker_name}")
-        success = self.wake_speaker(speaker_name, token)
+        success = self.wake_speaker(speaker_name)
 
         self.send_response(200 if success else 500)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Private-Network', 'true')
         self.end_headers()
         self.wfile.write(json.dumps({'ok': success}).encode('utf-8'))
 
-    def wake_speaker(self, name, token=None):
+    def wake_speaker(self, name):
         browser = None
         cast = None
         try:
             casts, browser = pychromecast.get_chromecasts(timeout=5)
-
             target = next((c for c in casts if c.name.lower() == name.strip().lower()), None)
 
             if not target:
-                print(f"Appareil '{name}' introuvable sur le réseau local.")
+                print(f"Appareil '{name}' introuvable.")
                 print(f"Appareils vus : {[c.name for c in casts]}")
                 return False
 
@@ -74,13 +48,17 @@ class Handler(BaseHTTPRequestHandler):
             print(f"Connexion à '{cast.name}'...")
             cast.wait(timeout=6)
 
-            # Enregistrement et lancement avec attente de validation
-            sp = EmbeddedSpotifyController(access_token=token)
-            cast.register_handler(sp)
-            sp.launch_spotify(timeout=4)
+            # 1. Réveil matériel immédiat (carillon Cast)
+            mc = cast.media_controller
+            mc.play_media(SILENCE_MP3, 'audio/mp3')
+            mc.block_until_active(timeout=4)
 
-            print(f"Session Spotify initialisée sur '{cast.name}' !")
-            time.sleep(1)
+            # 2. Bascule immédiate sur l'application Spotify
+            time.sleep(0.5)
+            cast.start_app(SPOTIFY_APP_ID)
+
+            print(f"'{cast.name}' réveillée et basculée sur Spotify avec succès !")
+            time.sleep(2)
             return True
 
         except Exception as e:

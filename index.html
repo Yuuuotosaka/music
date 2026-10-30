@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Notre cocon – Maison</title>
+  <title>Notre cocon – Salon</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
       --text: #f5efe6;
       --muted: #a99fb3;
       --danger: #ff5252;
-      --danger-glow: rgba(255, 82, 82, 0.25);
+      --danger-glow: rgba(255, 82, 82, 0.3);
       --success: #4caf50;
     }
 
@@ -27,46 +27,46 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 24px;
+      padding: 20px;
       user-select: none;
       -webkit-user-select: none;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
     .serif { font-family: 'Fraunces', Georgia, serif; }
 
-    /* Alerte Poubelles Ultra-Visible */
+    /* Alerte Poubelles Clignotante */
     #trash-alert {
       display: none;
-      background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 138, 101, 0.2));
+      background: linear-gradient(135deg, rgba(255, 82, 82, 0.22), rgba(255, 180, 84, 0.18));
       border: 2px solid var(--danger);
-      border-radius: 20px;
-      padding: 16px 24px;
+      border-radius: 18px;
+      padding: 14px 20px;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       animation: alertPulse 1.4s infinite alternate;
     }
     @keyframes alertPulse {
       0% {
-        box-shadow: 0 0 10px var(--danger-glow);
+        box-shadow: 0 0 8px var(--danger-glow);
         border-color: #ff5252;
         transform: scale(1);
       }
       100% {
-        box-shadow: 0 0 32px rgba(255, 82, 82, 0.6);
+        box-shadow: 0 0 28px rgba(255, 82, 82, 0.55);
         border-color: #ff8a80;
-        transform: scale(1.008);
+        transform: scale(1.006);
       }
     }
     .trash-icon {
-      font-size: 2.2rem;
+      font-size: 2rem;
       animation: swing 1s infinite alternate ease-in-out;
     }
     @keyframes swing {
-      0% { transform: rotate(-8deg); }
-      100% { transform: rotate(8deg); }
+      0% { transform: rotate(-10deg); }
+      100% { transform: rotate(10deg); }
     }
 
     /* En-tête */
@@ -74,33 +74,33 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
     }
-    .title-area h1 { font-size: 2rem; color: var(--text); line-height: 1.1; }
-    .title-area p { color: var(--muted); font-size: 1rem; margin-top: 4px; text-transform: capitalize; }
-    #clock { font-size: 2.6rem; color: var(--amber); font-weight: 700; }
+    .title-area h1 { font-size: 1.8rem; color: var(--text); line-height: 1.1; }
+    .title-area p { color: var(--muted); font-size: 0.95rem; margin-top: 3px; text-transform: capitalize; }
+    #clock { font-size: 2.3rem; color: var(--amber); font-weight: 700; }
 
     /* Grille Principale */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 24px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
       flex: 1;
     }
 
-    .col { display: flex; flex-direction: column; gap: 24px; }
+    .col { display: flex; flex-direction: column; gap: 18px; }
 
     /* Cartes */
     .card {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 22px;
+      border-radius: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      gap: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.22);
     }
 
     .card-head {
@@ -108,26 +108,46 @@
       justify-content: space-between;
       align-items: center;
     }
-    .card-head h2 { font-size: 1.25rem; font-weight: 700; color: var(--amber); }
+    .card-head h2 { font-size: 1.15rem; font-weight: 700; color: var(--amber); }
 
     .btn-action {
       background: var(--amber-glow);
       border: 1px solid var(--amber);
       color: var(--amber);
-      border-radius: 20px;
+      border-radius: 18px;
       padding: 6px 14px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
     }
     .btn-action:active { transform: scale(0.96); }
 
-    /* 1. Recettes Jow */
+    /* Module Poubelles permanent */
+    .trash-status-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--card-border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.92rem;
+    }
+    .trash-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 10px;
+      background: rgba(255, 180, 84, 0.12);
+      color: var(--amber);
+    }
+
+    /* Recettes Jow */
     .jow-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-height: 380px;
+      gap: 8px;
+      max-height: 250px;
       overflow-y: auto;
     }
     .jow-item {
@@ -136,8 +156,8 @@
       justify-content: space-between;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 12px 16px;
+      border-radius: 12px;
+      padding: 10px 14px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -148,49 +168,50 @@
       border-color: transparent;
     }
     .jow-item.done .jow-name { text-decoration: line-through; }
-    .jow-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
-    .jow-icon { font-size: 1.5rem; flex: none; }
-    .jow-name { font-size: 1.05rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .jow-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .jow-icon { font-size: 1.35rem; flex: none; }
+    .jow-name { font-size: 0.98rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .badge {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 3px 8px;
+      border-radius: 10px;
       background: rgba(255, 180, 84, 0.15);
       color: var(--amber);
+      flex: none;
     }
     .jow-item.done .badge {
       background: rgba(76, 175, 80, 0.15);
       color: #81c784;
     }
 
-    /* 2. Planning Médicaments Semaine */
+    /* Traitement Inky */
     .med-week {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
     .med-day-col {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 10px 4px;
+      border-radius: 12px;
+      padding: 8px 3px;
     }
     .med-day-col.today {
       border-color: var(--amber);
       background: var(--amber-glow);
     }
-    .day-name { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+    .day-name { font-size: 0.76rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
     .med-day-col.today .day-name { color: var(--amber); }
 
     .med-check {
-      width: 44px;
-      height: 48px;
-      border-radius: 10px;
+      width: 100%;
+      height: 44px;
+      border-radius: 8px;
       border: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.03);
       color: var(--muted);
@@ -200,7 +221,7 @@
       justify-content: center;
       gap: 2px;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
       transition: all 0.2s ease;
     }
@@ -210,55 +231,25 @@
       border-color: var(--success);
       color: #a5d6a7;
     }
-    .med-check span { font-size: 1rem; }
+    .med-check span { font-size: 0.95rem; }
 
-    /* 3. Liste de courses */
-    .todo-input-row {
-      display: flex;
-      gap: 10px;
-    }
-    .todo-input {
+    /* Module Agenda Iframe */
+    .calendar-container {
       flex: 1;
-      background: rgba(255, 255, 255, 0.04);
+      width: 100%;
+      min-height: 480px;
+      border-radius: 14px;
+      overflow: hidden;
       border: 1px solid var(--card-border);
-      color: var(--text);
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-size: 1rem;
-      outline: none;
+      background: #191424;
+      position: relative;
     }
-    .todo-input:focus { border-color: var(--amber); }
-    .btn-add {
-      background: var(--amber);
-      color: #1a1220;
-      border: none;
-      border-radius: 14px;
-      padding: 0 20px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-    .todo-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 460px;
-      overflow-y: auto;
-    }
-    .todo-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 12px 16px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .todo-item.done {
-      opacity: 0.4;
-      text-decoration: line-through;
+    .calendar-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      /* Inversion douce et teinte sombre pour s'accorder au thème salon */
+      filter: invert(0.88) hue-rotate(185deg) contrast(0.92);
     }
 
     /* Modal Importation Jow */
@@ -271,59 +262,60 @@
       z-index: 100;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 20px;
     }
     #modal.open { display: flex; }
     .modal-box {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: 24px;
+      border-radius: 20px;
       width: 100%;
-      max-width: 560px;
-      padding: 24px;
+      max-width: 520px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
     .modal-box textarea {
       width: 100%;
-      height: 160px;
+      height: 150px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-radius: 12px;
       color: var(--text);
-      padding: 14px;
-      font-size: 0.95rem;
+      padding: 12px;
+      font-size: 0.92rem;
       font-family: inherit;
       outline: none;
     }
     .modal-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 12px;
+      gap: 10px;
     }
     .btn-secondary {
       background: rgba(255, 255, 255, 0.06);
       color: var(--text);
       border: none;
-      padding: 10px 18px;
-      border-radius: 14px;
+      padding: 8px 16px;
+      border-radius: 12px;
       cursor: pointer;
     }
 
     @media (max-width: 860px) {
       .dashboard-grid { grid-template-columns: 1fr; }
+      .calendar-container { min-height: 380px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Alerte Poubelle Visuelle -->
+  <!-- Alerte Poubelle Visuelle (Active Lundi soir -> Mardi matin) -->
   <div id="trash-alert">
     <div class="trash-icon">🗑️</div>
     <div style="flex: 1;">
-      <div style="font-size: 1.25rem; font-weight: 700; color: #ff8a80;">Sortir les poubelles ce soir !</div>
-      <div style="font-size: 0.9rem; color: var(--muted); margin-top: 2px;">Ramassage prévu demain matin de bonne heure.</div>
+      <div style="font-size: 1.15rem; font-weight: 700; color: #ff8a80;">Sortir les poubelles ce soir !</div>
+      <div style="font-size: 0.85rem; color: var(--muted); margin-top: 2px;">Ramassage prévu demain (mardi) matin de bonne heure.</div>
     </div>
   </div>
 
@@ -337,45 +329,62 @@
 
   <div class="dashboard-grid">
 
-    <!-- Colonne GAUCHE : Repas Jow & Traitement Chienne -->
+    <!-- Colonne GAUCHE : Traitement Inky, Jow, Encart Poubelles -->
     <div class="col">
 
-      <!-- Module Repas Jow -->
+      <!-- Module Traitement Inky (Grille Semaine Lun-Dim) -->
       <div class="card">
         <div class="card-head">
-          <h2 class="serif">🍽️ Recettes Jow de la semaine</h2>
-          <button class="btn-action" onclick="openModal()">📥 Importer depuis Jow</button>
-        </div>
-        <div class="jow-list" id="jow-list">
-          <div style="color:var(--muted); font-size:0.95rem;">Aucune recette enregistrée. Cliquez sur Importer.</div>
-        </div>
-      </div>
-
-      <!-- Module Médicaments (Grille Semaine Lundi - Dimanche) -->
-      <div class="card">
-        <div class="card-head">
-          <h2 class="serif">💊 Traitement Chienne</h2>
-          <span style="font-size: 0.8rem; color: var(--muted);">Semaine en cours (reset chaque lundi)</span>
+          <h2 class="serif">🐕 Traitement Inky</h2>
+          <span style="font-size: 0.78rem; color: var(--muted);">Reset auto chaque lundi</span>
         </div>
         <div class="med-week" id="med-week">
           <!-- Généré automatiquement en JS -->
         </div>
       </div>
 
+      <!-- Module Recettes Jow -->
+      <div class="card">
+        <div class="card-head">
+          <h2 class="serif">🍽️ Recettes Jow de la semaine</h2>
+          <button class="btn-action" onclick="openModal()">📥 Importer Jow</button>
+        </div>
+        <div class="jow-list" id="jow-list">
+          <div style="color:var(--muted); font-size:0.9rem;">Aucune recette enregistrée. Cliquez sur Importer.</div>
+        </div>
+      </div>
+
+      <!-- Encart permanent info poubelles -->
+      <div class="card">
+        <div class="trash-status-card">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.4rem;">🚛</span>
+            <div>
+              <div style="font-weight:600;">Collecte des poubelles</div>
+              <div style="font-size:0.8rem; color:var(--muted);">À sortir la veille au soir</div>
+            </div>
+          </div>
+          <div class="trash-pill">Mardi matin</div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Colonne DROITE : Liste de courses -->
+    <!-- Colonne DROITE : Google Agenda Partagé -->
     <div class="col">
       <div class="card" style="height: 100%;">
         <div class="card-head">
-          <h2 class="serif">🛒 Liste de courses</h2>
-          <button class="btn-action" onclick="clearDoneTodos()">Nettoyer cochés</button>
+          <h2 class="serif">📅 Agenda partagé</h2>
+          <button class="btn-action" onclick="reloadCalendar()">Rafraîchir</button>
         </div>
-        <div class="todo-input-row">
-          <input type="text" id="todo-input" class="todo-input" placeholder="Ajouter un article...">
-          <button class="btn-add" onclick="addTodo()">+</button>
+        <div class="calendar-container">
+          <!-- Intégration en mode planning/agenda sans fioritures -->
+          <iframe 
+            id="gcal-frame"
+            src="https://calendar.google.com/calendar/embed?src=llob.moreauamelie%40gmail.com&ctz=Europe%2FParis&mode=AGENDA&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%231f1827" 
+            loading="lazy">
+          </iframe>
         </div>
-        <div class="todo-list" id="todo-list"></div>
       </div>
     </div>
 
@@ -384,14 +393,14 @@
   <!-- Fenêtre d'importation Jow -->
   <div id="modal">
     <div class="modal-box">
-      <h3 class="serif" style="font-size: 1.3rem; color: var(--amber);">Importer votre commande Jow</h3>
+      <h3 class="serif" style="font-size: 1.25rem; color: var(--amber);">Importer la commande Jow</h3>
       <p style="font-size: 0.85rem; color: var(--muted); line-height: 1.4;">
-        Copiez le contenu du mail Jow ou listez simplement vos plats (un par ligne), puis collez-les ici :
+        Collez le texte du mail récapitulatif Jow ou vos recettes (une par ligne) :
       </p>
-      <textarea id="jow-paste" placeholder="Exemple :&#10;Gnocchis sauce tomate et burrata&#10;Saumon rôti et brocolis&#10;Wrap poulet avocat..."></textarea>
+      <textarea id="jow-paste" placeholder="Exemple :&#10;Gnocchis sauce tomate burrata&#10;Saumon rôti haricots verts&#10;Wrap poulet avocat..."></textarea>
       <div class="modal-actions">
         <button class="btn-secondary" onclick="closeModal()">Annuler</button>
-        <button class="btn-action" onclick="processJowImport()" style="padding: 10px 22px;">Enregistrer le menu</button>
+        <button class="btn-action" onclick="processJowImport()" style="padding: 8px 18px;">Enregistrer le menu</button>
       </div>
     </div>
   </div>
@@ -406,7 +415,7 @@
       document.getElementById('full-date').textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
       
       const hour = now.getHours();
-      document.getElementById('greeting').textContent = hour >= 18 ? 'Bonsoir Romain & Amélie' : 'Bonjour Romain & Amélie';
+      document.getElementById('greeting').textContent = hour >= 18 ? 'Bonsoir' : 'Bonjour';
 
       checkTrash(now);
       checkWeekChanged(now);
@@ -424,7 +433,7 @@
       alertEl.style.display = (isMondayEvening || isTuesdayMorning) ? 'flex' : 'none';
     }
 
-    /* 2. Traitement Médicaments Semaine */
+    /* 2. Traitement Inky (Semaine Lundi - Dimanche) */
     function getWeekId(d) {
       const target = new Date(d.valueOf());
       const dayNr = (d.getDay() + 6) % 7;
@@ -439,11 +448,11 @@
 
     function checkWeekChanged(now) {
       const currentWeek = getWeekId(now);
-      const storedWeek = localStorage.getItem('med_current_week');
+      const storedWeek = localStorage.getItem('inky_med_week');
       if (storedWeek !== currentWeek) {
-        // Nouvelle semaine : on réinitialise toutes les cases
-        localStorage.setItem('med_current_week', currentWeek);
-        localStorage.setItem('med_week_data', JSON.stringify({}));
+        // Nouvelle semaine : réinitialisation complète des cases
+        localStorage.setItem('inky_med_week', currentWeek);
+        localStorage.setItem('inky_med_data', JSON.stringify({}));
         renderMedWeek();
       }
     }
@@ -451,7 +460,7 @@
     function renderMedWeek() {
       const container = document.getElementById('med-week');
       container.innerHTML = '';
-      const data = JSON.parse(localStorage.getItem('med_week_data') || '{}');
+      const data = JSON.parse(localStorage.getItem('inky_med_data') || '{}');
       const now = new Date();
       const currentDayIndex = (now.getDay() + 6) % 7; // 0 = Lundi, 6 = Dimanche
 
@@ -476,14 +485,14 @@
     }
 
     function toggleMedDay(dayIndex, period) {
-      const data = JSON.parse(localStorage.getItem('med_week_data') || '{}');
+      const data = JSON.parse(localStorage.getItem('inky_med_data') || '{}');
       const key = `${dayIndex}_${period}`;
       data[key] = !data[key];
-      localStorage.setItem('med_week_data', JSON.stringify(data));
+      localStorage.setItem('inky_med_data', JSON.stringify(data));
       renderMedWeek();
     }
 
-    /* 3. Module Repas Jow avec Icônes automatiques */
+    /* 3. Recettes Jow & Icônes */
     function guessIcon(title) {
       const t = title.toLowerCase();
       if (t.includes('poulet') || t.includes('dinde') || t.includes('volaille')) return '🍗';
@@ -506,7 +515,7 @@
       list.innerHTML = '';
 
       if (!recipes.length) {
-        list.innerHTML = '<div style="color:var(--muted); font-size:0.95rem;">Aucune recette enregistrée. Cliquez sur Importer.</div>';
+        list.innerHTML = '<div style="color:var(--muted); font-size:0.9rem;">Aucune recette enregistrée. Cliquez sur Importer.</div>';
         return;
       }
 
@@ -524,7 +533,7 @@
             <span class="jow-icon">${rec.icon}</span>
             <span class="jow-name">${rec.title}</span>
           </div>
-          <span class="badge">${rec.done ? 'Fait ✓' : 'À cuisiner'}</span>
+          <span class="badge">${rec.done ? 'Fait ✓' : 'À faire'}</span>
         `;
         list.appendChild(item);
       });
@@ -542,7 +551,6 @@
       const text = document.getElementById('jow-paste').value.trim();
       if (!text) { closeModal(); return; }
 
-      // Découpe ligne par ligne en éliminant les lignes parasites du mail
       const lines = text.split('\n')
         .map(l => l.trim())
         .filter(l => l.length > 3 && !l.toLowerCase().includes('total') && !l.toLowerCase().includes('livraison') && !l.toLowerCase().includes('commande'));
@@ -553,52 +561,16 @@
         done: false
       }));
 
-      // Remplacement complet du menu précédent
       localStorage.setItem('jow_recipes', JSON.stringify(newRecipes));
       document.getElementById('jow-paste').value = '';
       closeModal();
       renderJow();
     }
 
-    /* 4. Module Liste de Courses */
-    let todos = JSON.parse(localStorage.getItem('home_todos') || '[]');
-
-    function renderTodos() {
-      const list = document.getElementById('todo-list');
-      list.innerHTML = '';
-      todos.forEach((todo, idx) => {
-        const item = document.createElement('div');
-        item.className = 'todo-item' + (todo.done ? ' done' : '');
-        item.innerHTML = `<span>${todo.text}</span><span style="color:var(--amber); font-weight:700;">${todo.done ? '✓' : '○'}</span>`;
-        item.onclick = () => {
-          todos[idx].done = !todos[idx].done;
-          saveTodos();
-        };
-        list.appendChild(item);
-      });
-    }
-
-    function addTodo() {
-      const input = document.getElementById('todo-input');
-      const val = input.value.trim();
-      if (!val) return;
-      todos.push({ text: val, done: false });
-      input.value = '';
-      saveTodos();
-    }
-
-    document.getElementById('todo-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') addTodo();
-    });
-
-    function clearDoneTodos() {
-      todos = todos.filter(t => !t.done);
-      saveTodos();
-    }
-
-    function saveTodos() {
-      localStorage.setItem('home_todos', JSON.stringify(todos));
-      renderTodos();
+    /* 4. Rafraîchissement de l'agenda */
+    function reloadCalendar() {
+      const frame = document.getElementById('gcal-frame');
+      frame.src = frame.src;
     }
 
     /* Initialisation */
@@ -606,7 +578,8 @@
     setInterval(updateClock, 10000);
     renderMedWeek();
     renderJow();
-    renderTodos();
+    // Rafraîchissement automatique de l'agenda toutes les 30 minutes
+    setInterval(reloadCalendar, 1800000);
   </script>
 </body>
 </html>

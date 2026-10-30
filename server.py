@@ -5,7 +5,6 @@ import pychromecast
 
 # Son bref (1 seconde de silence MP3) pour forcer le réveil matériel immédiat du Nest
 SILENCE_MP3 = "https://raw.githubusercontent.com/anars/blank-audio/master/1-second-of-silence.mp3"
-SPOTIFY_APP_ID = "CC32E027"
 
 class Handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
@@ -41,7 +40,6 @@ class Handler(BaseHTTPRequestHandler):
 
             if not target:
                 print(f"Appareil '{name}' introuvable.")
-                print(f"Appareils vus : {[c.name for c in casts]}")
                 return False
 
             cast = target
@@ -53,12 +51,9 @@ class Handler(BaseHTTPRequestHandler):
             mc.play_media(SILENCE_MP3, 'audio/mp3')
             mc.block_until_active(timeout=4)
 
-            # 2. Bascule immédiate sur l'application Spotify
-            time.sleep(0.5)
-            cast.start_app(SPOTIFY_APP_ID)
-
-            print(f"'{cast.name}' réveillée et basculée sur Spotify avec succès !")
-            time.sleep(2)
+            # On arrête le lecteur proprement sans forcer de start_app rejeté
+            mc.stop()
+            print(f"'{cast.name}' est réveillée et prête !")
             return True
 
         except Exception as e:

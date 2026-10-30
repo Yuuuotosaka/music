@@ -5,8 +5,8 @@ import threading
 import pychromecast
 from pychromecast.controllers import BaseController
 
-    SPOTIFY_APP_ID = "CC32E753"
-    SPOTIFY_NAMESPACE = "urn:x-cast:com.spotify.chromecast.secure.v1"
+SPOTIFY_APP_ID = "CC32E753"
+SPOTIFY_NAMESPACE = "urn:x-cast:com.spotify.chromecast.secure.v1"
 
 class SpotifyCastBridge(BaseController):
         def __init__(self, access_token):

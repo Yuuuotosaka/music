@@ -928,12 +928,18 @@
 
           if (!isAwake) {
             toast('Réveil de ' + targetName + ' en cours…');
-            wakeSpeakerLocal(targetName);
+            const ok = await wakeSpeakerLocal(targetName); // Attend le retour de Termux !
+            if (!ok) {
+              toast("L'enceinte n'a pas pu être réveillée (vérifiez Termux).");
+              return;
+            }
+
+            toast('Enceinte réveillée ! Connexion Spotify en cours…');
             const freshDevice = await waitForDeviceToAppear(targetName);
             if (freshDevice) {
               targetId = freshDevice.id;
             } else {
-              toast('L’enceinte tarde à répondre, tentative...');
+              toast('L’enceinte tarde à s’annoncer sur Spotify...');
             }
           }
 

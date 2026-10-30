@@ -1,6 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import time
+import threading
 import pychromecast
 from pychromecast.controllers import BaseController
 
@@ -12,17 +13,23 @@ class EmbeddedSpotifyController(BaseController):
     def __init__(self, access_token=None):
         super().__init__(SPOTIFY_NAMESPACE, SPOTIFY_APP_ID)
         self.access_token = access_token
+        self.is_ready = threading.Event()
 
-    def launch_spotify(self):
-        def launched():
-            # Initialisation de la session Spotify sur l'enceinte
-            payload = {
-                "type": "setCredentials",
-                "credentials": self.access_token or ""
-            }
-            self.send_message(payload)
+    def launch_spotify(self, timeout=5):
+        def launched(*args, **kwargs):
+            try:
+                # args[0] est un booléen indiquant si le lancement Cast a réussi
+                payload = {
+                    "type": "setCredentials",
+                    "credentials": self.access_token or ""
+                }
+                self.send_message(payload)
+            finally:
+                self.is_ready.set()
 
         self.launch(callback_function=launched)
+        # On attend que le message de credentials soit envoyé avant de couper la socket
+        return self.is_ready.wait(timeout)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -67,13 +74,13 @@ class Handler(BaseHTTPRequestHandler):
             print(f"Connexion à '{cast.name}'...")
             cast.wait(timeout=6)
 
-            # Instanciation et enregistrement du contrôleur Spotify
+            # Enregistrement et lancement avec attente de validation
             sp = EmbeddedSpotifyController(access_token=token)
             cast.register_handler(sp)
-            sp.launch_spotify()
+            sp.launch_spotify(timeout=4)
 
             print(f"Session Spotify initialisée sur '{cast.name}' !")
-            time.sleep(1.5)
+            time.sleep(1)
             return True
 
         except Exception as e:

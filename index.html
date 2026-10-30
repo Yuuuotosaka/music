@@ -189,22 +189,6 @@
       return r.msg||('Erreur Spotify ('+r.status+')');
     }
 
-    /* ---------- Pont local pour le réveil des enceintes ---------- */
-    async function wakeSpeakerLocal(speakerName){
-      try{
-        const r=await fetch('http://127.0.0.1:8080/',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({speaker:speakerName})
-        });
-        const d=await r.json();
-        return !!(d&&d.ok);
-      }catch(e){
-        console.warn('Pont local non disponible:',e);
-        return false;
-      }
-    }
-
     /* ---------- Authentification PKCE ---------- */
     const b64=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
     async function startAuth(){
@@ -266,6 +250,26 @@
         history.replaceState({},document.title,'/');
       }
       if(LS.getItem('sp_refresh')){$('auth').style.display='none';initConsole()}
+    }
+
+    /* ---------- Pont local pour le réveil des enceintes ---------- */
+    async function wakeSpeakerLocal(speakerName){
+      try{
+        const tk=await getToken();
+        const r=await fetch('http://127.0.0.1:8080/',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            speaker:speakerName,
+            token:tk
+          })
+        });
+        const d=await r.json();
+        return !!(d&&d.ok);
+      }catch(e){
+        console.warn('Pont local non disponible:',e);
+        return false;
+      }
     }
 
     /* ---------- API Spotify ---------- */
@@ -339,7 +343,6 @@
         if(!ok){
           toast('Échec du réveil local (vérifiez que le pont tourne)');
         }
-        // Attente de 4 secondes pour que l'enceinte réveillée s'enregistre auprès de Spotify
         await sleep(4000);
         await loadDevices(true);
       }

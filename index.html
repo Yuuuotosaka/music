@@ -346,7 +346,7 @@
       transition: all 0.25s ease;
     }
     .jow-item:active { transform: scale(0.97); }
-    .jow-item.done { opacity: 0.55; background: rgba(255, 255, 255, 0.01); border-color: transparent; }
+    .jow-item.done { opacity: 0.45; background: rgba(255, 255, 255, 0.01); border-color: transparent; }
     .jow-item.done .jow-name { text-decoration: line-through; }
     .jow-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .jow-icon { font-size: 1.35rem; flex: none; }
@@ -695,7 +695,7 @@
       <div class="card" id="card-inky">
         <div class="card-head">
           <h2 class="serif">🐕 Traitement Inky</h2>
-          <span style="font-size: 0.78rem; color: var(--muted);">Reset auto chaque lundi</span>
+          <span style="font-size: 0.78rem; color: var(--muted);">Reset auto chaque lundi à 00h01</span>
         </div>
         <div class="med-week" id="med-week"></div>
       </div>
@@ -803,7 +803,7 @@
     </div>
   </div>
 
-  <!-- Indicateur discret de connexion -->
+  <!-- Pastille de statut réseau -->
   <div id="sync-status" title="Synchronisation active"></div>
 
   <script type="module">
@@ -823,7 +823,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Suivi de l'état de connexion via la pastille discrète
     onValue(ref(db, '.info/connected'), (snap) => {
       const syncEl = document.getElementById('sync-status');
       if (snap.val() === true) {
@@ -938,7 +937,12 @@
     }
 
     let inkyData = {};
+    let syncedWeekId = null;
 
+    /* 
+      Calcul de la semaine ISO : 
+      Le lundi matin commence dès 00h00 / 00h01.
+    */
     function getWeekId(d) {
       const target = new Date(d.valueOf());
       const dayNr = (d.getDay() + 6) % 7;
@@ -949,14 +953,12 @@
       return target.getFullYear() + '_W' + Math.ceil((firstThursday - target) / 604800000);
     }
 
+    /* Reset automatique dès 00h01 le lundi */
     function checkWeekChanged(now) {
       const currentWeek = getWeekId(now);
-      const storedWeek = localStorage.getItem('inky_med_week');
-      if (storedWeek !== currentWeek) {
-        localStorage.setItem('inky_med_week', currentWeek);
-        inkyData = {};
+      if (syncedWeekId && syncedWeekId !== currentWeek) {
+        set(ref(db, 'inky_med_week'), currentWeek);
         set(ref(db, 'inky_meds'), {});
-        renderMedWeek();
       }
     }
 
@@ -1078,6 +1080,7 @@
       return '🥘';
     }
 
+    /* Rendu avec tri automatique : les recettes faites glissent tout en bas */
     function renderJow() {
       const list = document.getElementById('jow-list');
       list.innerHTML = '';
@@ -1087,14 +1090,20 @@
         return;
       }
 
-      jowRecipes.forEach((rec, idx) => {
+      // Conserve l'index d'origine dans Firebase pour la mise à jour
+      const indexedRecipes = jowRecipes.map((r, i) => ({ ...r, originalIndex: i }));
+
+      // Tri stable : non faits en premier (0), faits à la fin (1)
+      indexedRecipes.sort((a, b) => (a.done === b.done ? 0 : a.done ? 1 : -1));
+
+      indexedRecipes.forEach(rec => {
         const item = document.createElement('div');
         item.className = 'jow-item' + (rec.done ? ' done' : '');
         item.addEventListener('click', () => {
           const newDone = !rec.done;
           if (newDone) triggerFullScreenFX('jow');
-          set(ref(db, `jow_recipes/${idx}/done`), newDone);
-          set(ref(db, `jow_recipes/${idx}/by`), newDone ? currentProfile : null);
+          set(ref(db, `jow_recipes/${rec.originalIndex}/done`), newDone);
+          set(ref(db, `jow_recipes/${rec.originalIndex}/by`), newDone ? currentProfile : null);
         });
 
         const who = rec.by ? `<span class="who-badge ${rec.by === 'Romain' ? 'romain' : 'amelie'}">${rec.by}</span>` : '';
@@ -1288,6 +1297,18 @@
     });
 
     /* ÉCOUTEURS FIREBASE */
+    onValue(ref(db, 'inky_med_week'), snapshot => {
+      syncedWeekId = snapshot.val();
+      const now = new Date();
+      const currentWeek = getWeekId(now);
+      if (!syncedWeekId) {
+        set(ref(db, 'inky_med_week'), currentWeek);
+      } else if (syncedWeekId !== currentWeek) {
+        set(ref(db, 'inky_med_week'), currentWeek);
+        set(ref(db, 'inky_meds'), {});
+      }
+    });
+
     onValue(ref(db, 'inky_meds'), snapshot => {
       inkyData = snapshot.val() || {};
       renderMedWeek();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="default">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,7 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
+    /* ========================================================
+       1. VARIABLES DE THÈMES (DÉFAUT vs HALLOWEEN)
+       ======================================================== */
+    :root, [data-theme="default"] {
       --bg: #14101a;
       --card: #1f1827;
       --card-border: rgba(255, 255, 255, 0.08);
@@ -20,12 +23,33 @@
       --danger: #ff453a;
       --danger-glow: rgba(255, 69, 58, 0.45);
       --success: #30d158;
+      --cal-hue: 195deg;
       
       --color-romain: #4fc3f7;
       --color-amelie: #f48fb1;
 
       --love-pink: #ff2a85;
       --love-pink-glow: rgba(255, 42, 133, 0.45);
+    }
+
+    [data-theme="halloween"] {
+      --bg: #0b0711;
+      --card: #160e22;
+      --card-border: rgba(255, 123, 0, 0.15);
+      --amber: #ff7b00; /* Orange citrouille ardent */
+      --amber-glow: rgba(255, 123, 0, 0.35);
+      --text: #f3ecf8;
+      --muted: #9584a6;
+      --danger: #ff3344;
+      --danger-glow: rgba(255, 51, 68, 0.55);
+      --success: #00e676; /* Vert spectral */
+      --cal-hue: 245deg; /* Adapte l'agenda aux tons violets/noirs profonds */
+      
+      --color-romain: #00e5ff;
+      --color-amelie: #d500f9;
+
+      --love-pink: #ff1744;
+      --love-pink-glow: rgba(255, 23, 68, 0.5);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -42,6 +66,7 @@
       gap: 16px;
       overflow-x: hidden;
       position: relative;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
     .serif { font-family: 'Fraunces', Georgia, serif; }
@@ -55,7 +80,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(20, 16, 26, 0.4);
+      background: rgba(11, 7, 17, 0.5);
       backdrop-filter: blur(3px);
       opacity: 0;
       transition: opacity 0.2s ease-out;
@@ -64,7 +89,7 @@
     .fx-svg {
       width: 240px;
       height: 240px;
-      filter: drop-shadow(0 0 30px rgba(255, 180, 84, 0.7));
+      filter: drop-shadow(0 0 30px var(--amber-glow));
       animation: fxPop 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     @keyframes fxPop {
@@ -79,7 +104,7 @@
 
     #med-alert {
       display: none;
-      background: linear-gradient(135deg, rgba(255, 69, 58, 0.32), rgba(255, 159, 10, 0.25));
+      background: linear-gradient(135deg, rgba(255, 69, 58, 0.32), rgba(255, 123, 0, 0.25));
       border: 2px solid var(--danger);
       border-radius: 18px;
       padding: 14px 20px;
@@ -91,7 +116,7 @@
     /* Alerte Poubelles : Lundi de 16h00 à 23h30 */
     #trash-alert {
       display: none;
-      background: linear-gradient(135deg, rgba(255, 50, 50, 0.35), rgba(255, 140, 0, 0.3));
+      background: linear-gradient(135deg, rgba(255, 50, 50, 0.35), rgba(255, 123, 0, 0.35));
       border: 3px solid #ff3b30;
       border-radius: 18px;
       padding: 16px 22px;
@@ -107,15 +132,15 @@
         transform: scale(1);
       }
       100% {
-        box-shadow: 0 0 45px rgba(255, 69, 58, 0.95), inset 0 0 22px rgba(255, 140, 0, 0.5);
-        border-color: #ffcc00;
+        box-shadow: 0 0 45px rgba(255, 69, 58, 0.95), inset 0 0 22px rgba(255, 123, 0, 0.5);
+        border-color: #ff7b00;
         transform: scale(1.012);
       }
     }
 
     @keyframes dangerPulse {
-      0% { box-shadow: 0 0 10px var(--danger-glow); border-color: #ff453a; transform: scale(1); }
-      100% { box-shadow: 0 0 35px rgba(255, 69, 58, 0.75); border-color: #ff9f0a; transform: scale(1.008); }
+      0% { box-shadow: 0 0 10px var(--danger-glow); border-color: var(--danger); transform: scale(1); }
+      100% { box-shadow: 0 0 35px var(--danger-glow); border-color: var(--amber); transform: scale(1.008); }
     }
 
     .alert-icon { font-size: 2.4rem; animation: alertWiggle 0.9s infinite alternate ease-in-out; flex: none; }
@@ -194,6 +219,7 @@
       background: currentColor;
     }
 
+    /* HORLOGE CLIQUABLE (DÉCLENCHEUR DU MENU DE THÈME) */
     .clock-box {
       display: flex;
       align-items: baseline;
@@ -202,6 +228,17 @@
       color: var(--amber);
       font-weight: 700;
       text-shadow: 0 0 16px var(--amber-glow);
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 2px 8px;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+    .clock-box:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: scale(1.03);
+    }
+    .clock-box:active {
+      transform: scale(0.96);
     }
     .clock-dots { animation: blinkDots 1s step-start infinite; }
     @keyframes blinkDots { 50% { opacity: 0.2; } }
@@ -223,8 +260,8 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.22);
-      transition: border-color 0.3s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      transition: background 0.4s ease, border-color 0.3s;
     }
     .card.alerting { border-color: var(--danger); box-shadow: 0 0 20px var(--danger-glow); }
 
@@ -259,7 +296,7 @@
     }
     .love-card:hover {
       background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(255, 180, 84, 0.3);
+      border-color: var(--amber);
     }
 
     .love-card.unread {
@@ -270,11 +307,11 @@
     @keyframes lovePulse {
       0% {
         box-shadow: 0 0 8px var(--love-pink-glow);
-        border-color: #ff2a85;
+        border-color: var(--love-pink);
         transform: scale(1);
       }
       100% {
-        box-shadow: 0 0 26px rgba(255, 42, 133, 0.75);
+        box-shadow: 0 0 26px var(--love-pink-glow);
         border-color: #ff85be;
         transform: scale(1.01);
       }
@@ -362,7 +399,7 @@
       font-weight: 700;
       padding: 4px 9px;
       border-radius: 10px;
-      background: rgba(255, 180, 84, 0.15);
+      background: var(--amber-glow);
       color: var(--amber);
       flex: none;
     }
@@ -383,7 +420,7 @@
     .med-day-col.today {
       border-color: var(--amber);
       background: var(--amber-glow);
-      box-shadow: 0 0 14px rgba(255, 180, 84, 0.15);
+      box-shadow: 0 0 14px var(--amber-glow);
     }
     .day-name { font-size: 0.76rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
     .med-day-col.today .day-name { color: var(--amber); }
@@ -440,7 +477,7 @@
       100% { box-shadow: 0 0 16px rgba(255, 69, 58, 0.95); transform: scale(1.05); }
     }
 
-    /* Agenda stylisé harmonieux */
+    /* Agenda stylisé */
     .calendar-container {
       flex: 1;
       width: 100%;
@@ -455,13 +492,13 @@
       width: 100%;
       height: 100%;
       border: 0;
-      filter: invert(0.92) hue-rotate(195deg) saturate(1.4) contrast(1.05);
+      filter: invert(0.92) hue-rotate(var(--cal-hue)) saturate(1.4) contrast(1.05);
       mix-blend-mode: screen;
       opacity: 0.92;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s, filter 0.4s ease;
     }
 
-    /* Fenêtres Modales */
+    /* Modales */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -505,6 +542,43 @@
       padding: 8px 16px;
       border-radius: 12px;
       cursor: pointer;
+    }
+
+    /* Options du menu de thème */
+    .theme-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .theme-card-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+    .theme-card-btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .theme-card-btn.selected {
+      border-color: var(--amber);
+      background: var(--amber-glow);
+    }
+    .theme-preview-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .theme-preview-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
     }
 
     .big-message-body {
@@ -551,7 +625,7 @@
       gap: 4px;
     }
 
-    /* Pastille discrète de statut réseau */
+    /* Pastille de statut réseau */
     #sync-status {
       position: fixed;
       bottom: 12px;
@@ -684,7 +758,8 @@
         </button>
       </div>
 
-      <div class="serif clock-box">
+      <!-- HORLOGE AVEC DÉCLENCHEUR DU MENU CACHÉ -->
+      <div class="serif clock-box" id="btn-theme-trigger" title="Changer l'ambiance visuelle">
         <span id="clk-h">00</span><span class="clock-dots">:</span><span id="clk-m">00</span>
       </div>
     </div>
@@ -739,6 +814,42 @@
             loading="lazy">
           </iframe>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU CACHÉ DES THÈMES -->
+  <div class="modal-overlay" id="modal-theme">
+    <div class="modal-box">
+      <h3 class="serif" style="font-size: 1.25rem; color: var(--amber);">🎨 Ambiance du cocon</h3>
+      <p style="font-size: 0.85rem; color: var(--muted); margin-top: -6px;">
+        Sélectionnez l'atmosphère visuelle de votre tableau de bord :
+      </p>
+      
+      <div class="theme-options-grid">
+        <button class="theme-card-btn" id="theme-btn-default" type="button">
+          <div class="theme-preview-dots">
+            <span style="background: #1f1827; border: 1px solid #ffb454;"></span>
+            <span style="background: #ffb454;"></span>
+            <span style="background: #f48fb1;"></span>
+          </div>
+          <div style="font-weight: 700; font-size: 0.95rem;">Ambré Cocon</div>
+          <div style="font-size: 0.76rem; color: var(--muted);">Thème original doux</div>
+        </button>
+
+        <button class="theme-card-btn" id="theme-btn-halloween" type="button">
+          <div class="theme-preview-dots">
+            <span style="background: #160e22; border: 1px solid #ff7b00;"></span>
+            <span style="background: #ff7b00;"></span>
+            <span style="background: #d500f9;"></span>
+          </div>
+          <div style="font-weight: 700; font-size: 0.95rem;">Nuit d'Halloween</div>
+          <div style="font-size: 0.76rem; color: var(--muted);">Noir, violet & orange</div>
+        </button>
+      </div>
+
+      <div class="modal-actions" style="margin-top: 8px;">
+        <button class="btn-secondary" id="btn-close-theme">Fermer</button>
       </div>
     </div>
   </div>
@@ -834,6 +945,44 @@
       }
     });
 
+    /* ========================================================
+       GESTION DU THÈME CACHÉ DANS L'HORLOGE
+       ======================================================== */
+    let currentTheme = localStorage.getItem('cocon_theme') || 'default';
+
+    function applyTheme(themeName) {
+      currentTheme = themeName;
+      document.documentElement.setAttribute('data-theme', themeName);
+      localStorage.setItem('cocon_theme', themeName);
+
+      document.getElementById('theme-btn-default').classList.toggle('selected', themeName === 'default');
+      document.getElementById('theme-btn-halloween').classList.toggle('selected', themeName === 'halloween');
+    }
+
+    applyTheme(currentTheme);
+
+    const modalTheme = document.getElementById('modal-theme');
+    document.getElementById('btn-theme-trigger').addEventListener('click', () => {
+      modalTheme.classList.add('open');
+    });
+
+    document.getElementById('btn-close-theme').addEventListener('click', () => {
+      modalTheme.classList.remove('open');
+    });
+
+    document.getElementById('theme-btn-default').addEventListener('click', () => {
+      applyTheme('default');
+      modalTheme.classList.remove('open');
+    });
+
+    document.getElementById('theme-btn-halloween').addEventListener('click', () => {
+      applyTheme('halloween');
+      modalTheme.classList.remove('open');
+    });
+
+    /* ========================================================
+       GESTION DES PROFILS
+       ======================================================== */
     let currentProfile = localStorage.getItem('active_user') || 'Romain';
     const btnRomain = document.getElementById('btn-romain');
     const btnAmelie = document.getElementById('btn-amelie');
@@ -878,8 +1027,8 @@
                 <stop offset="100%" stop-color="#d63031"/>
               </linearGradient>
             </defs>
-            <circle cx="50" cy="50" r="46" fill="rgba(48,209,88,0.15)" stroke="#30d158" stroke-width="2.5" stroke-dasharray="4 4"/>
-            <path d="M50 16c-3-6-9-5-10-1 0 5 10 11 10 11s10-6 10-11c-1-4-7-5-10 1z" fill="#ff453a"/>
+            <circle cx="50" cy="50" r="46" fill="rgba(48,209,88,0.15)" stroke="var(--success)" stroke-width="2.5" stroke-dasharray="4 4"/>
+            <path d="M50 16c-3-6-9-5-10-1 0 5 10 11 10 11s10-6 10-11c-1-4-7-5-10 1z" fill="var(--danger)"/>
             <g transform="rotate(-45 50 50)">
               <path d="M36 28 C36 21 64 21 64 28 L64 50 L36 50 Z" fill="#ffffff" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"/>
               <path d="M36 50 L64 50 L64 72 C64 79 36 79 36 72 Z" fill="url(#pillGrad)" stroke="#ff7675" stroke-width="1.5"/>
@@ -923,7 +1072,6 @@
       checkWeekChanged(now);
     }
 
-    /* ALERTE POUBELLES : LUNDI DE 16h00 A 23h30 STRICT */
     function checkTrash(now) {
       const day = now.getDay();
       const hour = now.getHours();
@@ -939,10 +1087,6 @@
     let inkyData = {};
     let syncedWeekId = null;
 
-    /* 
-      Calcul de la semaine ISO : 
-      Le lundi matin commence dès 00h00 / 00h01.
-    */
     function getWeekId(d) {
       const target = new Date(d.valueOf());
       const dayNr = (d.getDay() + 6) % 7;
@@ -953,7 +1097,6 @@
       return target.getFullYear() + '_W' + Math.ceil((firstThursday - target) / 604800000);
     }
 
-    /* Reset automatique dès 00h01 le lundi */
     function checkWeekChanged(now) {
       const currentWeek = getWeekId(now);
       if (syncedWeekId && syncedWeekId !== currentWeek) {
@@ -1080,7 +1223,6 @@
       return '🥘';
     }
 
-    /* Rendu avec tri automatique : les recettes faites glissent tout en bas */
     function renderJow() {
       const list = document.getElementById('jow-list');
       list.innerHTML = '';
@@ -1090,10 +1232,7 @@
         return;
       }
 
-      // Conserve l'index d'origine dans Firebase pour la mise à jour
       const indexedRecipes = jowRecipes.map((r, i) => ({ ...r, originalIndex: i }));
-
-      // Tri stable : non faits en premier (0), faits à la fin (1)
       indexedRecipes.sort((a, b) => (a.done === b.done ? 0 : a.done ? 1 : -1));
 
       indexedRecipes.forEach(rec => {

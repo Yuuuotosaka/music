@@ -9,15 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ========================================================
-       1. VARIABLES DE THÈMES (DÉFAUT vs HALLOWEEN TRANCHÉ)
-       ======================================================== */
     :root, [data-theme="default"] {
       --bg: #14101a;
       --card: #1f1827;
       --card-border: rgba(255, 255, 255, 0.08);
       --amber: #ffb454;
-      --amber-glow: rgba(255, 180, 84, 0.2);
+      --amber-glow: rgba(255, 180, 84, 0.25);
       --text: #f5efe6;
       --muted: #a99fb3;
       --danger: #ff453a;
@@ -35,17 +32,17 @@
 
     [data-theme="halloween"] {
       --bg: #07040b;
-      --body-overlay: radial-gradient(circle at 50% 0%, rgba(138, 43, 226, 0.22) 0%, transparent 70%);
+      --body-overlay: radial-gradient(circle at 50% 0%, rgba(138, 43, 226, 0.25) 0%, transparent 70%);
       --card: #120a1c;
-      --card-border: rgba(255, 111, 0, 0.35);
-      --amber: #ff6f00; /* Orange citrouille très électrique */
-      --amber-glow: rgba(255, 111, 0, 0.55);
+      --card-border: rgba(255, 111, 0, 0.4);
+      --amber: #ff6f00;
+      --amber-glow: rgba(255, 111, 0, 0.6);
       --text: #f0e6f7;
       --muted: #9f8bb2;
       --danger: #ff0055;
       --danger-glow: rgba(255, 0, 85, 0.65);
-      --success: #00ff66; /* Vert néon toxique / fantôme */
-      --cal-hue: 280deg; /* Vire l'agenda au violet sombre et noir profond */
+      --success: #00ff66;
+      --cal-hue: 280deg;
       
       --color-romain: #00e5ff;
       --color-amelie: #e040fb;
@@ -161,15 +158,42 @@
     }
     .brand-wrap { display: flex; align-items: center; gap: 20px; }
 
-    /* Illustration Silhouette Réaliste */
+    /* ANIMATIONS CONTINUES DU DESSIN FAMILLE */
     .family-svg {
-      width: 240px;
-      height: 64px;
+      width: 250px;
+      height: 68px;
       flex: none;
-      filter: drop-shadow(0 2px 10px var(--amber-glow));
-      animation: floatArt 4s ease-in-out infinite;
+      filter: drop-shadow(0 2px 14px var(--amber-glow));
+      animation: familyFloat 3.5s ease-in-out infinite alternate;
     }
-    @keyframes floatArt { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    @keyframes familyFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(0.4deg); }
+      100% { transform: translateY(2px) rotate(-0.4deg); }
+    }
+
+    /* Battement du cœur au repos */
+    .heart-anim {
+      transform-origin: 38px 9px;
+      animation: heartBeatPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes heartBeatPulse {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.22); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.15); }
+      70% { transform: scale(1); }
+    }
+
+    /* Queue du chat qui ondule */
+    .cat-tail {
+      transform-origin: 180px 67px;
+      animation: tailWag 2.4s ease-in-out infinite alternate;
+    }
+    @keyframes tailWag {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(14deg); }
+    }
 
     .title-area h1 { font-size: 2rem; color: var(--text); line-height: 1.1; }
     .title-area p { color: var(--muted); font-size: 0.92rem; margin-top: 4px; text-transform: capitalize; }
@@ -221,23 +245,28 @@
       background: currentColor;
     }
 
-    /* HORLOGE CLIQUABLE (MENU CACHÉ) */
+    /* HORLOGE AGRANDIE & LUMINEUSE */
     .clock-box {
       display: flex;
       align-items: baseline;
-      gap: 2px;
-      font-size: 2.5rem;
+      gap: 3px;
+      font-size: 3.2rem; /* Plus gros et visible */
       color: var(--amber);
       font-weight: 700;
-      text-shadow: 0 0 16px var(--amber-glow);
+      letter-spacing: -0.5px;
       cursor: pointer;
-      border-radius: 12px;
-      padding: 2px 8px;
+      border-radius: 14px;
+      padding: 4px 12px;
+      animation: clockGlow 2.8s ease-in-out infinite alternate;
       transition: transform 0.15s ease, background 0.2s ease;
     }
+    @keyframes clockGlow {
+      0% { text-shadow: 0 0 12px var(--amber-glow); }
+      100% { text-shadow: 0 0 28px var(--amber-glow), 0 0 8px rgba(255, 255, 255, 0.4); }
+    }
     .clock-box:hover {
-      background: rgba(255, 255, 255, 0.06);
-      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.04);
     }
     .clock-box:active {
       transform: scale(0.96);
@@ -263,7 +292,7 @@
       flex-direction: column;
       gap: 14px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      transition: background 0.4s ease, border-color 0.3s;
+      transition: background 0.4s ease, border-color 0.3s, box-shadow 0.3s;
     }
     .card.alerting { border-color: var(--danger); box-shadow: 0 0 20px var(--danger-glow); }
 
@@ -323,7 +352,11 @@
       font-size: 1.6rem;
       flex: none;
       display: inline-block;
-      transition: transform 0.2s;
+      animation: iconFloat 3s ease-in-out infinite alternate;
+    }
+    @keyframes iconFloat {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-3px) rotate(6deg); }
     }
     .love-card.unread .love-icon {
       animation: heartBeat 0.9s infinite alternate;
@@ -419,10 +452,15 @@
       border-radius: 12px;
       padding: 8px 3px;
     }
+    /* Colonne du jour actif avec respiration lumineuse */
     .med-day-col.today {
       border-color: var(--amber);
       background: var(--amber-glow);
-      box-shadow: 0 0 14px var(--amber-glow);
+      animation: todayPulse 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes todayPulse {
+      0% { box-shadow: 0 0 6px var(--amber-glow); transform: scale(1); }
+      100% { box-shadow: 0 0 18px var(--amber-glow); transform: scale(1.02); }
     }
     .day-name { font-size: 0.76rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
     .med-day-col.today .day-name { color: var(--amber); }
@@ -649,6 +687,7 @@
       .calendar-container { min-height: 380px; }
       header { flex-direction: column; align-items: flex-start; gap: 12px; }
       .header-right { width: 100%; justify-content: space-between; }
+      .clock-box { font-size: 2.6rem; }
     }
   </style>
 </head>
@@ -687,88 +726,67 @@
 
   <header>
     <div class="brand-wrap">
-      <!-- NOUVEAU DESSIN RÉALISTE : COUPLE ENLACÉ + ÉPAGNEUL + CHIHUAHUA + CHAT -->
+      <!-- DESSIN FIGURATIF RÉALISTE AVEC MICRO-ANIMATIONS PASSIVES -->
       <svg class="family-svg" viewBox="0 0 320 80">
-        <!-- 1. LE COUPLE AMOUREUX (Romain & Amélie assis enlacés) -->
+        <!-- 1. LE COUPLE AMOUREUX ENLACÉ -->
         <g fill="var(--amber)">
-          <!-- Romain (Gauche) : Épaules larges, bras passé derrière elle, tête penchée vers elle -->
-          <!-- Tête & Cheveux courts -->
+          <!-- Romain : Épaules et bras qui enlace Amélie -->
           <circle cx="28" cy="22" r="8"/>
           <path d="M20 18 c0-4 4-7 9-7 c4 0 7 2 8 5 c-2 1-5 1-7 2 c-3 1-6 2-7 4 c-2 0-3-2-3-4 z"/>
-          <!-- Nez et profil doux tourné vers elle -->
           <path d="M33 22 c2 1 3 2 3 3 c-1 1-3 1-3 1 z"/>
-          <!-- Buste / Dos masculin -->
           <path d="M14 58 c0-12 6-22 17-24 c4 3 8 3 12 0 c2 1 4 2 6 3 c-1 7-4 13-6 21 z"/>
-          <!-- Bras protecteur qui enlace les épaules d'Amélie -->
           <path d="M43 37 c5 1 12 4 15 9 c-2 3-5 3-8 1 c-3-2-5-5-7-7 z"/>
 
-          <!-- Amélie (Droite) : Tête posée contre lui, longue chevelure ondulée -->
-          <!-- Tête & Visage délicat tourné vers Romain -->
+          <!-- Amélie : Tête contre lui et longue chevelure -->
           <circle cx="48" cy="24" r="7.5"/>
           <path d="M44 24 c-2 0-3 1-3 2 c1 1 3 0 3-2 z"/>
-          <!-- Belle chevelure longue et fluide qui tombe le long du dos -->
           <path d="M44 17 c4-3 9-2 12 1 c3 3 4 8 3 13 c-1 7 0 15 2 21 c-2 2-5 3-6 0 c-2-8-2-15-1-20 c-2 0-4-3-6-6 c-3-3-4-6-4-9 z"/>
-          <!-- Buste féminin épousant celui de son compagnon -->
           <path d="M37 58 c2-8 5-14 8-18 c3 1 6 1 8 3 c-2 4-4 9-4 15 z"/>
 
-          <!-- Cœur plein vibrant qui flotte au-dessus d'eux -->
-          <path d="M38 9 c-2-3-6-2-6 1 c0 4 6 7 6 7 s6-3 6-7 c0-3-4-4-6-1 z"/>
+          <!-- Cœur qui bat en rythme continu -->
+          <g class="heart-anim">
+            <path d="M38 9 c-2-3-6-2-6 1 c0 4 6 7 6 7 s6-3 6-7 c0-3-4-4-6-1 z"/>
+          </g>
         </g>
 
-        <!-- SÉPARATEUR ÉLÉGANT -->
+        <!-- SÉPARATEUR DISCRET -->
         <line x1="72" y1="18" x2="72" y2="58" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="2 3"/>
 
-        <!-- 2. L'ÉPAGNEUL BRETON (Assis, profil fier, chanfrein net, longues oreilles frangées) -->
+        <!-- 2. L'ÉPAGNEUL BRETON -->
         <g fill="var(--amber)">
-          <!-- Tête, crâne avec stop de chien de chasse et truffe expressive -->
           <path d="M88 38 c1-6 6-10 11-10 c4 0 7 2 9 5 l8 1 c3 0 5 2 5 4 c0 2-2 3-5 3 l-5 1 c-1 4-4 7-8 7 c-5 0-9-4-10-8 z"/>
-          <!-- Détail truffe et œil en réserve -->
           <circle cx="120" cy="38" r="1.6" fill="var(--bg)"/>
           <circle cx="106" cy="34" r="1.3" fill="var(--bg)"/>
-          <!-- Longue oreille tombante garnie de mèches douces -->
           <path d="M96 32 c-2 4-4 10-1 16 c2 4 5 7 7 5 c3-2 2-7 1-11 c-1-4-4-8-7-10 z"/>
-          <!-- Poitrail vigoureux et pattes avant bien campées -->
           <path d="M104 49 c4 2 7 6 7 13 v6 h-4 v-6 c0-4-2-7-5-9 z"/>
           <path d="M96 49 c1 4 2 9 2 15 h-4 c0-5-1-10-2-14 z"/>
-          <!-- Dos musclé et cuisse arrière assise au sol -->
           <path d="M89 44 c-4 4-5 11-3 17 c2 5 6 7 11 7 h16 c2 0 3-2 2-3 c-3-2-6-4-9-5 c-4-1-6-4-7-8 c-1-3-1-6-2-8 z"/>
         </g>
 
-        <!-- 3. LE CHIHUAHUA (Très petit, crâne en pomme, museau fin, oreilles géantes dressées) -->
+        <!-- 3. LE CHIHUAHUA -->
         <g fill="var(--amber)">
-          <!-- Crâne bombé caractéristique et tout petit museau relevé -->
           <circle cx="152" cy="47" r="7"/>
           <path d="M156 46 l6 1 c1 0 2 1 2 2 c0 1-1 2-2 2 l-4 1 z"/>
-          <!-- Œil expressif et truffe miniature -->
           <circle cx="165" cy="50" r="0.9" fill="var(--bg)"/>
           <circle cx="155" cy="45" r="1.1" fill="var(--bg)"/>
-          <!-- Grandes oreilles chauve-souris dressées fièrement -->
           <path d="M148 42 l-6-14 c4 1 9 6 10 11 z"/>
           <path d="M155 41 l5-15 c3 4 3 10 0 14 z"/>
-          <!-- Corps miniature assis compact -->
           <path d="M145 54 c-1 4-1 9 1 12 c2 2 4 2 6 2 h8 c1 0 2-1 2-2 v-6 c0-3-1-5-3-6 z"/>
-          <!-- Petite patte avant fine -->
           <path d="M153 58 v10 h-2.5 v-10 z"/>
-          <!-- Petite queue dressée en panache -->
           <path d="M143 64 c-2-4-1-8 2-11 c-1 4 0 8 2 10 z"/>
         </g>
 
-        <!-- 4. LE CHAT (Silhouette féline souple, oreilles fines triangulaires et queue recourbée) -->
+        <!-- 4. LE CHAT AVEC QUEUE EN MOUVEMENT -->
         <g fill="var(--amber)">
-          <!-- Tête féline fine de profil/trois-quarts -->
           <circle cx="192" cy="46" r="6"/>
-          <!-- Petites oreilles pointues bien dessinées -->
           <path d="M187 42 l-3-7 l6 3 z"/>
           <path d="M195 42 l4-7 l-1 7 z"/>
-          <!-- Yeux en amande délicats -->
           <circle cx="190" cy="45" r="0.9" fill="var(--bg)"/>
           <circle cx="195" cy="45" r="0.9" fill="var(--bg)"/>
-          <!-- Dos rond, silhouette souple assise au repos -->
           <path d="M186 52 c-4 3-5 8-5 13 c0 3 3 5 6 5 h10 c1 0 2-1 2-2 v-7 c0-4-2-7-5-9 z"/>
-          <!-- Patte avant féline posée -->
           <path d="M194 56 v14 h-2.5 v-14 z"/>
-          <!-- Longue queue ondulante qui remonte avec grâce -->
-          <path d="M180 67 c-4 0-7-4-7-8 c0-5 4-8 7-11 c-2 3-4 6-4 9 c0 4 2 7 5 7 z"/>
+          <!-- Queue qui ondule doucement -->
+          <path class="cat-tail" d="M180 67 c-4 0-7-4-7-8 c0-5 4-8 7-11 c-2 3-4 6-4 9 c0 4 2 7 5 7 z"/>
         </g>
       </svg>
 
@@ -788,7 +806,7 @@
         </button>
       </div>
 
-      <!-- HORLOGE AVEC DÉCLENCHEUR DU MENU CACHÉ -->
+      <!-- HORLOGE PLUS GROSSE ET PULSANTE -->
       <div class="serif clock-box" id="btn-theme-trigger" title="Changer l'ambiance visuelle">
         <span id="clk-h">00</span><span class="clock-dots">:</span><span id="clk-m">00</span>
       </div>

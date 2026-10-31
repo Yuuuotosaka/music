@@ -132,7 +132,6 @@
     }
     .brand-wrap { display: flex; align-items: center; gap: 20px; }
 
-    /* Illustration vectorielle soignée */
     .family-svg {
       width: 220px;
       height: 58px;
@@ -441,7 +440,7 @@
       100% { box-shadow: 0 0 16px rgba(255, 69, 58, 0.95); transform: scale(1.05); }
     }
 
-    /* Agenda */
+    /* Agenda stylisé harmonieux (Solution 1) */
     .calendar-container {
       flex: 1;
       width: 100%;
@@ -449,14 +448,17 @@
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--card-border);
-      background: #191424;
+      background: var(--card);
       position: relative;
     }
     .calendar-container iframe {
       width: 100%;
       height: 100%;
       border: 0;
-      filter: invert(0.88) hue-rotate(185deg) contrast(0.92);
+      filter: invert(0.92) hue-rotate(195deg) saturate(1.4) contrast(1.05);
+      mix-blend-mode: screen;
+      opacity: 0.92;
+      transition: opacity 0.3s;
     }
 
     /* Fenêtres Modales */
@@ -505,7 +507,6 @@
       cursor: pointer;
     }
 
-    /* Affichage du message en grand */
     .big-message-body {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 42, 133, 0.3);
@@ -533,7 +534,6 @@
       cursor: pointer;
     }
 
-    /* Liste des Archives */
     .archive-list {
       display: flex;
       flex-direction: column;
@@ -603,9 +603,8 @@
 
   <header>
     <div class="brand-wrap">
-      <!-- Illustration Couple + Animaux Réaliste (SVG ambré) -->
       <svg class="family-svg" viewBox="0 0 260 70">
-        <!-- HOMME (Romain) : Buste de profil, cheveux courts, épaules nettes -->
+        <!-- HOMME (Romain) -->
         <g stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
           <path d="M18 26 c-1-6 2-12 8-13 c5-1 9 1 11 5 c2 0 4 2 4 5 c0 2-1 3-2 4 c2 2 1 5-1 6 c-3 2-6 2-8 2" />
           <path d="M31 35 c-2 4-5 6-9 6 c-3 0-6-2-7-5" />
@@ -613,20 +612,19 @@
           <path d="M12 56 c1-9 5-15 13-17 c4 3 8 3 12 0 c7 2 11 8 12 17" />
         </g>
 
-        <!-- CŒUR CENTRAL SUSPENDU -->
+        <!-- CŒUR -->
         <path d="M49 14 c-2-3-6-2-6 1 c0 4 6 7 6 7 s6-3 6-7 c0-3-4-4-6-1 z" fill="var(--amber)" stroke="none"/>
 
-        <!-- FEMME (Amélie) : Cheveux longs ondulés, silhouette délicate -->
+        <!-- FEMME (Amélie) -->
         <g stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
           <path d="M57 28 c1-7 6-12 11-12 c6 0 10 5 10 11 c0 4-2 7-4 9 c2 4 4 10 3 16 c-1 3-3 5-5 5 c-2 0-3-2-3-5 c-1-6 0-11 2-15" />
           <path d="M57 28 c2 2 4 3 6 3 c2 0 4-1 5-3" />
           <path d="M53 56 c1-7 4-11 9-13 c3 2 6 2 9 0 c5 2 8 6 9 13" />
         </g>
 
-        <!-- SÉPARATEUR DISCRET -->
         <line x1="94" y1="20" x2="94" y2="52" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-dasharray="2 3"/>
 
-        <!-- ÉPAGNEUL BRETON : Assis de profil, oreilles tombantes à mèches, chanfrein de chien -->
+        <!-- ÉPAGNEUL BRETON -->
         <g stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
           <path d="M104 36 c1-4 4-7 8-7 c3 0 5 2 7 4 l4 1 c2 0 3 2 3 3 c0 2-2 3-4 3 l-3 1 c-1 3-3 5-6 5" />
           <circle cx="125" cy="37" r="1.2" fill="var(--amber)"/>
@@ -637,7 +635,7 @@
           <path d="M105 40 c-2 3-3 8-2 13 c1 4 4 7 7 7 h9" />
         </g>
 
-        <!-- PETIT CHIHUAHUA : Minuscule, crâne rond, stop marqué, grandes oreilles dressées pointues -->
+        <!-- CHIHUAHUA -->
         <g stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
           <path d="M148 44 c-1-3 1-6 4-7 c2-1 4 0 5 2 l3 0 c1 0 2 1 2 2 c0 1-1 2-2 2 l-2 1 c0 2-1 4-3 5" />
           <circle cx="161" cy="41" r="1" fill="var(--amber)"/>
@@ -649,7 +647,7 @@
           <path d="M145 56 c-1-3 0-6 2-8" />
         </g>
 
-        <!-- CHAT : Corps félin souple, petites oreilles pointues, queue ondulée en S -->
+        <!-- CHAT -->
         <g stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
           <circle cx="184" cy="42" r="5.5"/>
           <circle cx="182" cy="41" r="0.8" fill="var(--amber)"/>
@@ -704,7 +702,7 @@
         </div>
       </div>
 
-      <!-- NOUVEL ENCART : MOTS DOUX DU TÉLÉPHONE (COMPACT) -->
+      <!-- ENCART MOTS DOUX -->
       <div class="card" style="padding: 14px;">
         <div class="love-card" id="love-card-trigger">
           <span class="love-icon" id="love-icon-el">💌</span>
@@ -752,7 +750,7 @@
     </div>
   </div>
 
-  <!-- MODAL LECTURE DU MOT DOUX EN GRAND -->
+  <!-- MODAL LECTURE MOT DOUX -->
   <div class="modal-overlay" id="modal-read-love">
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -772,7 +770,7 @@
     </div>
   </div>
 
-  <!-- MODAL ÉCRITURE NOUVEAU MOT DOUX -->
+  <!-- MODAL ÉCRITURE MOT DOUX -->
   <div class="modal-overlay" id="modal-write-love">
     <div class="modal-box">
       <h3 class="serif" style="font-size: 1.25rem; color: var(--love-pink);">✍️ Laisser un mot doux</h3>
@@ -906,7 +904,6 @@
       checkWeekChanged(now);
     }
 
-    /* ALERTE POUBELLES : LUNDI DE 16h00 A 23h30 STRICT */
     function checkTrash(now) {
       const day = now.getDay();
       const hour = now.getHours();
@@ -1095,7 +1092,7 @@
       });
     }
 
-    /* GESTION DES MOTS DOUX TEMPS RÉEL (SYNC FIREBASE) */
+    /* GESTION DES MOTS DOUX */
     let allNotes = {};
     let activeUnreadNote = null;
 
@@ -1266,7 +1263,7 @@
       const frame = document.getElementById('gcal-frame');
       frame.style.opacity = '0.4';
       frame.src = frame.src;
-      setTimeout(() => { frame.style.opacity = '1'; }, 800);
+      setTimeout(() => { frame.style.opacity = '0.92'; }, 800);
     });
 
     /* ÉCOUTEURS FIREBASE */

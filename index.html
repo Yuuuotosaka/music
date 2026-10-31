@@ -88,7 +88,7 @@
       animation: dangerPulse 1.1s infinite alternate ease-in-out;
     }
 
-    /* Alerte Poubelles Ultra-Visible : Lundi de 16h00 à 23h30 */
+    /* Alerte Poubelles : Lundi de 16h00 à 23h30 */
     #trash-alert {
       display: none;
       background: linear-gradient(135deg, rgba(255, 50, 50, 0.35), rgba(255, 140, 0, 0.3));
@@ -440,7 +440,7 @@
       100% { box-shadow: 0 0 16px rgba(255, 69, 58, 0.95); transform: scale(1.05); }
     }
 
-    /* Agenda stylisé harmonieux (Solution 1) */
+    /* Agenda stylisé harmonieux */
     .calendar-container {
       flex: 1;
       width: 100%;
@@ -551,13 +551,21 @@
       gap: 4px;
     }
 
+    /* Pastille discrète de statut réseau */
     #sync-status {
       position: fixed;
-      bottom: 8px;
-      right: 12px;
-      font-size: 0.72rem;
-      color: var(--muted);
-      opacity: 0.6;
+      bottom: 12px;
+      right: 14px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(48, 209, 88, 0.6);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    #sync-status.offline {
+      background: var(--danger);
+      box-shadow: 0 0 8px rgba(255, 69, 58, 0.6);
     }
 
     @media (max-width: 860px) {
@@ -795,7 +803,8 @@
     </div>
   </div>
 
-  <div id="sync-status">Initialisation...</div>
+  <!-- Indicateur discret de connexion -->
+  <div id="sync-status" title="Synchronisation active"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
@@ -813,7 +822,18 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    document.getElementById('sync-status').textContent = '🟢 En ligne (synchro active)';
+
+    // Suivi de l'état de connexion via la pastille discrète
+    onValue(ref(db, '.info/connected'), (snap) => {
+      const syncEl = document.getElementById('sync-status');
+      if (snap.val() === true) {
+        syncEl.classList.remove('offline');
+        syncEl.title = 'Connecté (synchronisation active)';
+      } else {
+        syncEl.classList.add('offline');
+        syncEl.title = 'Hors ligne';
+      }
+    });
 
     let currentProfile = localStorage.getItem('active_user') || 'Romain';
     const btnRomain = document.getElementById('btn-romain');
@@ -904,6 +924,7 @@
       checkWeekChanged(now);
     }
 
+    /* ALERTE POUBELLES : LUNDI DE 16h00 A 23h30 STRICT */
     function checkTrash(now) {
       const day = now.getDay();
       const hour = now.getHours();

@@ -154,7 +154,7 @@
     .alert-icon { font-size: 2.2rem; animation: alertWiggle 0.9s infinite alternate ease-in-out; flex: none; }
     @keyframes alertWiggle { 0% { transform: rotate(-14deg) scale(0.92); } 100% { transform: rotate(14deg) scale(1.14); } }
 
-    /* En-tête compacte sans scroll */
+    /* En-tête */
     header {
       display: flex;
       justify-content: space-between;
@@ -306,7 +306,7 @@
     .clock-dots { animation: blinkDots 1s step-start infinite; }
     @keyframes blinkDots { 50% { opacity: 0.2; } }
 
-    /* Grille Principale sans overflow */
+    /* Grille Principale */
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
@@ -473,7 +473,6 @@
     .jow-item.done { opacity: 0.45; background: rgba(255, 255, 255, 0.01); border-color: transparent; }
     .jow-item.done .jow-name { text-decoration: line-through; }
     
-    /* Animation mise en avant du plat tiré au sort */
     .jow-item.picked-dish {
       border-color: var(--amber) !important;
       background: var(--amber-glow) !important;
@@ -1043,9 +1042,9 @@
     });
 
     /* ========================================================
-       1. DÉCOMPTE DE JOURS EN COUPLE (DEPUIS LE 22/06/2026)
+       1. DÉCOMPTE DE JOURS EN COUPLE (DEPUIS LE 22/06/2025)
        ======================================================== */
-    const START_DATE = new Date(2026, 5, 22); // Mois 5 = Juin en JS
+    const START_DATE = new Date(2025, 5, 22); // Mois 5 = Juin en JS
     function updateCoupleCounter(now) {
       const diffTime = now.getTime() - START_DATE.getTime();
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -1105,7 +1104,6 @@
       const min = now.getMinutes();
       const totalMins = hour * 60 + min;
 
-      // 23h30 = 1410 min | 06h30 = 390 min
       const isNight = totalMins >= 1410 || totalMins < 390;
 
       if (isNight) {
@@ -1115,7 +1113,6 @@
       }
     }
 
-    // Réveil temporaire de 30s au toucher la nuit
     window.addEventListener('click', () => {
       if (document.body.classList.contains('night-dim')) {
         document.body.classList.add('night-wake');
@@ -1446,7 +1443,7 @@
       });
     }
 
-    /* 5. SÉLECTION ALÉATOIRE D'UN PLAT DU SOIR */
+    /* SÉLECTION ALÉATOIRE D'UN PLAT DU SOIR */
     document.getElementById('btn-random-dish').addEventListener('click', () => {
       const unDoneList = jowRecipes
         .map((r, i) => ({ ...r, idx: i }))
@@ -1457,10 +1454,8 @@
         return;
       }
 
-      // Nettoyage visuel préalable
       document.querySelectorAll('.jow-item').forEach(el => el.classList.remove('picked-dish'));
 
-      // Choix aléatoire
       const picked = unDoneList[Math.floor(Math.random() * unDoneList.length)];
       const targetEl = document.getElementById(`dish-item-${picked.idx}`);
 

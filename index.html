@@ -59,15 +59,23 @@
       background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
-      padding: 20px;
+      padding: 16px 20px;
       user-select: none;
       -webkit-user-select: none;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       overflow-x: hidden;
       position: relative;
-      transition: background 0.4s ease, color 0.4s ease;
+      transition: background 0.4s ease, color 0.4s ease, opacity 0.5s ease, filter 0.5s ease;
+    }
+
+    /* MODE NUIT AUTOMATIQUE (23h30 - 06h30) */
+    body.night-dim {
+      filter: brightness(0.22) contrast(0.9);
+    }
+    body.night-dim:active, body.night-wake {
+      filter: brightness(1) contrast(1);
     }
 
     .serif { font-family: 'Fraunces', Georgia, serif; }
@@ -101,26 +109,25 @@
     }
 
     /* Bannières d'alerte */
-    .alerts-container { display: flex; flex-direction: column; gap: 12px; }
+    .alerts-container { display: flex; flex-direction: column; gap: 10px; }
 
     #med-alert {
       display: none;
       background: linear-gradient(135deg, rgba(255, 69, 58, 0.32), rgba(255, 111, 0, 0.3));
       border: 2px solid var(--danger);
       border-radius: 18px;
-      padding: 14px 20px;
+      padding: 12px 18px;
       align-items: center;
       gap: 16px;
       animation: dangerPulse 1.1s infinite alternate ease-in-out;
     }
 
-    /* Alerte Poubelles : Lundi de 16h00 à 23h30 */
     #trash-alert {
       display: none;
       background: linear-gradient(135deg, rgba(255, 50, 50, 0.4), rgba(255, 111, 0, 0.4));
       border: 3px solid #ff3b30;
       border-radius: 18px;
-      padding: 16px 22px;
+      padding: 14px 20px;
       align-items: center;
       gap: 18px;
       animation: trashFlash 0.9s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
@@ -144,35 +151,33 @@
       100% { box-shadow: 0 0 35px var(--danger-glow); border-color: var(--amber); transform: scale(1.008); }
     }
 
-    .alert-icon { font-size: 2.4rem; animation: alertWiggle 0.9s infinite alternate ease-in-out; flex: none; }
+    .alert-icon { font-size: 2.2rem; animation: alertWiggle 0.9s infinite alternate ease-in-out; flex: none; }
     @keyframes alertWiggle { 0% { transform: rotate(-14deg) scale(0.92); } 100% { transform: rotate(14deg) scale(1.14); } }
 
-    /* En-tête */
+    /* En-tête compacte sans scroll */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 14px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--card-border);
       gap: 16px;
     }
-    .brand-wrap { display: flex; align-items: center; gap: 20px; }
+    .brand-wrap { display: flex; align-items: center; gap: 16px; min-width: 0; }
 
-    /* ANIMATIONS CONTINUES DU DESSIN FAMILLE */
     .family-svg {
-      width: 250px;
-      height: 68px;
+      width: 210px;
+      height: 56px;
       flex: none;
-      filter: drop-shadow(0 2px 14px var(--amber-glow));
+      filter: drop-shadow(0 2px 12px var(--amber-glow));
       animation: familyFloat 3.5s ease-in-out infinite alternate;
     }
     @keyframes familyFloat {
       0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(0.4deg); }
+      50% { transform: translateY(-4px) rotate(0.4deg); }
       100% { transform: translateY(2px) rotate(-0.4deg); }
     }
 
-    /* Battement du cœur au repos */
     .heart-anim {
       transform-origin: 38px 9px;
       animation: heartBeatPulse 1.4s ease-in-out infinite;
@@ -185,7 +190,6 @@
       70% { transform: scale(1); }
     }
 
-    /* Queue du chat qui ondule */
     .cat-tail {
       transform-origin: 180px 67px;
       animation: tailWag 2.4s ease-in-out infinite alternate;
@@ -195,13 +199,44 @@
       100% { transform: rotate(14deg); }
     }
 
-    .title-area h1 { font-size: 2rem; color: var(--text); line-height: 1.1; }
-    .title-area p { color: var(--muted); font-size: 0.92rem; margin-top: 4px; text-transform: capitalize; }
+    .title-area h1 { font-size: 1.85rem; color: var(--text); line-height: 1.1; white-space: nowrap; }
+    .meta-sub-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+    .meta-pill-love {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: rgba(255, 42, 133, 0.12);
+      border: 1px solid rgba(255, 42, 133, 0.35);
+      border-radius: 10px;
+      color: #ff85be;
+      font-weight: 700;
+    }
+    .meta-pill-moon {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--amber);
+      font-weight: 600;
+    }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
+      flex: none;
     }
 
     .profile-switch {
@@ -209,114 +244,138 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       border-radius: 24px;
-      padding: 4px;
-      gap: 4px;
+      padding: 3px;
+      gap: 3px;
     }
     .profile-btn {
       background: transparent;
       border: 1px solid transparent;
       color: var(--muted);
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s ease;
     }
     .profile-btn.active.romain {
       background: rgba(79, 195, 247, 0.18);
       color: var(--color-romain);
       border-color: var(--color-romain);
-      box-shadow: 0 0 12px rgba(79, 195, 247, 0.35);
+      box-shadow: 0 0 10px rgba(79, 195, 247, 0.35);
     }
     .profile-btn.active.amelie {
       background: rgba(244, 143, 177, 0.18);
       color: var(--color-amelie);
       border-color: var(--color-amelie);
-      box-shadow: 0 0 12px rgba(244, 143, 177, 0.35);
+      box-shadow: 0 0 10px rgba(244, 143, 177, 0.35);
     }
     .profile-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: currentColor;
     }
 
-    /* HORLOGE AGRANDIE & LUMINEUSE */
     .clock-box {
       display: flex;
       align-items: baseline;
-      gap: 3px;
-      font-size: 3.2rem; /* Plus gros et visible */
+      gap: 2px;
+      font-size: 3rem;
       color: var(--amber);
       font-weight: 700;
       letter-spacing: -0.5px;
       cursor: pointer;
       border-radius: 14px;
-      padding: 4px 12px;
+      padding: 2px 10px;
       animation: clockGlow 2.8s ease-in-out infinite alternate;
       transition: transform 0.15s ease, background 0.2s ease;
     }
     @keyframes clockGlow {
-      0% { text-shadow: 0 0 12px var(--amber-glow); }
-      100% { text-shadow: 0 0 28px var(--amber-glow), 0 0 8px rgba(255, 255, 255, 0.4); }
+      0% { text-shadow: 0 0 10px var(--amber-glow); }
+      100% { text-shadow: 0 0 24px var(--amber-glow), 0 0 8px rgba(255, 255, 255, 0.4); }
     }
     .clock-box:hover {
       background: rgba(255, 255, 255, 0.08);
-      transform: scale(1.04);
+      transform: scale(1.03);
     }
-    .clock-box:active {
-      transform: scale(0.96);
-    }
+    .clock-box:active { transform: scale(0.96); }
     .clock-dots { animation: blinkDots 1s step-start infinite; }
     @keyframes blinkDots { 50% { opacity: 0.2; } }
 
-    /* Grille Principale */
+    /* Grille Principale sans overflow */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 18px;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
       flex: 1;
     }
-    .col { display: flex; flex-direction: column; gap: 18px; }
+    .col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 
     .card {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 18px;
+      border-radius: 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      gap: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
       transition: background 0.4s ease, border-color 0.3s, box-shadow 0.3s;
     }
     .card.alerting { border-color: var(--danger); box-shadow: 0 0 20px var(--danger-glow); }
 
     .card-head { display: flex; justify-content: space-between; align-items: center; }
-    .card-head h2 { font-size: 1.15rem; font-weight: 700; color: var(--amber); display: flex; align-items: center; gap: 8px; }
+    .card-head h2 { font-size: 1.1rem; font-weight: 700; color: var(--amber); display: flex; align-items: center; gap: 8px; }
     
+    .head-actions-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .btn-action {
       background: var(--amber-glow);
       border: 1px solid var(--amber);
       color: var(--amber);
-      border-radius: 18px;
-      padding: 6px 14px;
-      font-size: 0.8rem;
+      border-radius: 16px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
     }
     .btn-action:active { transform: scale(0.94); }
+
+    .btn-dice {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .btn-dice:hover {
+      background: var(--amber-glow);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+    .btn-dice:active { transform: scale(0.92); }
 
     /* Encart Mot Doux */
     .love-card {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 12px 14px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -349,7 +408,7 @@
     }
 
     .love-icon {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       flex: none;
       display: inline-block;
       animation: iconFloat 3s ease-in-out infinite alternate;
@@ -366,19 +425,10 @@
       100% { transform: scale(1.22); }
     }
 
-    .love-text-preview {
-      flex: 1;
-      min-width: 0;
-    }
-    .love-sender-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .love-text-preview { flex: 1; min-width: 0; }
+    .love-sender-name { font-size: 0.86rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
     .love-snippet {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
@@ -386,16 +436,11 @@
       margin-top: 2px;
     }
 
-    .love-actions-btns {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex: none;
-    }
+    .love-actions-btns { display: flex; align-items: center; gap: 6px; flex: none; }
     .btn-pill {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 4px 9px;
+      padding: 4px 8px;
       border-radius: 10px;
       border: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.04);
@@ -405,7 +450,14 @@
     .btn-pill:hover { background: rgba(255, 255, 255, 0.08); }
 
     /* Recettes Jow */
-    .jow-list { display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
+    .jow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
     .jow-item {
       display: flex;
       align-items: center;
@@ -413,27 +465,36 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 9px 12px;
       cursor: pointer;
       transition: all 0.25s ease;
     }
     .jow-item:active { transform: scale(0.97); }
     .jow-item.done { opacity: 0.45; background: rgba(255, 255, 255, 0.01); border-color: transparent; }
     .jow-item.done .jow-name { text-decoration: line-through; }
-    .jow-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    .jow-icon { font-size: 1.35rem; flex: none; }
-    .jow-name { font-size: 0.98rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    .jow-right-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* Animation mise en avant du plat tiré au sort */
+    .jow-item.picked-dish {
+      border-color: var(--amber) !important;
+      background: var(--amber-glow) !important;
+      box-shadow: 0 0 20px var(--amber-glow);
+      animation: dishHighlight 1.5s ease-in-out infinite alternate;
     }
+    @keyframes dishHighlight {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.02); }
+    }
+
+    .jow-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .jow-icon { font-size: 1.3rem; flex: none; }
+    .jow-name { font-size: 0.94rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .jow-right-meta { display: flex; align-items: center; gap: 6px; }
     .badge {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 4px 9px;
-      border-radius: 10px;
+      padding: 3px 8px;
+      border-radius: 8px;
       background: var(--amber-glow);
       color: var(--amber);
       flex: none;
@@ -441,18 +502,17 @@
     .jow-item.done .badge { background: rgba(48, 209, 88, 0.18); color: #81c784; }
 
     /* Traitement Inky */
-    .med-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .med-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
     .med-day-col {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 8px 3px;
+      padding: 7px 2px;
     }
-    /* Colonne du jour actif avec respiration lumineuse */
     .med-day-col.today {
       border-color: var(--amber);
       background: var(--amber-glow);
@@ -460,14 +520,14 @@
     }
     @keyframes todayPulse {
       0% { box-shadow: 0 0 6px var(--amber-glow); transform: scale(1); }
-      100% { box-shadow: 0 0 18px var(--amber-glow); transform: scale(1.02); }
+      100% { box-shadow: 0 0 16px var(--amber-glow); transform: scale(1.02); }
     }
-    .day-name { font-size: 0.76rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+    .day-name { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
     .med-day-col.today .day-name { color: var(--amber); }
 
     .med-check {
       width: 100%;
-      height: 48px;
+      height: 46px;
       border-radius: 8px;
       border: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.03);
@@ -476,22 +536,22 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 1px;
       cursor: pointer;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 600;
       position: relative;
       transition: all 0.2s ease;
     }
     .med-check:active { transform: scale(0.9); }
     .med-check.done { background: rgba(48, 209, 88, 0.2); border-color: var(--success); color: #a5d6a7; }
-    .med-check span.icon { font-size: 0.95rem; }
+    .med-check span.icon { font-size: 0.9rem; }
 
     .who-badge {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 800;
-      padding: 1px 5px;
-      border-radius: 6px;
+      padding: 1px 4px;
+      border-radius: 5px;
       line-height: 1.1;
       text-transform: uppercase;
     }
@@ -521,7 +581,7 @@
     .calendar-container {
       flex: 1;
       width: 100%;
-      min-height: 480px;
+      min-height: 440px;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--card-border);
@@ -556,15 +616,15 @@
       border: 1px solid var(--card-border);
       border-radius: 20px;
       width: 100%;
-      max-width: 520px;
-      padding: 22px;
+      max-width: 500px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
     .modal-box textarea {
       width: 100%;
-      height: 140px;
+      height: 130px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       border-radius: 12px;
@@ -584,7 +644,6 @@
       cursor: pointer;
     }
 
-    /* Grille sélecteur thèmes */
     .theme-options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -604,29 +663,20 @@
       color: var(--text);
       transition: all 0.2s ease;
     }
-    .theme-card-btn:hover {
-      background: rgba(255, 255, 255, 0.07);
-    }
+    .theme-card-btn:hover { background: rgba(255, 255, 255, 0.07); }
     .theme-card-btn.selected {
       border-color: var(--amber);
       background: var(--amber-glow);
     }
-    .theme-preview-dots {
-      display: flex;
-      gap: 6px;
-    }
-    .theme-preview-dots span {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
+    .theme-preview-dots { display: flex; gap: 6px; }
+    .theme-preview-dots span { width: 12px; height: 12px; border-radius: 50%; }
 
     .big-message-body {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 42, 133, 0.3);
       border-radius: 16px;
-      padding: 20px;
-      font-size: 1.25rem;
+      padding: 18px;
+      font-size: 1.2rem;
       line-height: 1.5;
       color: #fff;
       font-family: 'Fraunces', Georgia, serif;
@@ -636,14 +686,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
       user-select: none;
-      padding: 6px 0;
+      padding: 4px 0;
     }
     .read-checkbox-row input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 19px;
+      height: 19px;
       accent-color: var(--love-pink);
       cursor: pointer;
     }
@@ -651,21 +701,20 @@
     .archive-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-height: 280px;
+      gap: 8px;
+      max-height: 260px;
       overflow-y: auto;
     }
     .archive-item {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 10px 12px;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
 
-    /* Pastille de statut réseau */
     #sync-status {
       position: fixed;
       bottom: 12px;
@@ -682,12 +731,12 @@
       box-shadow: 0 0 8px rgba(255, 69, 58, 0.6);
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .dashboard-grid { grid-template-columns: 1fr; }
       .calendar-container { min-height: 380px; }
-      header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      header { flex-direction: column; align-items: flex-start; gap: 10px; }
       .header-right { width: 100%; justify-content: space-between; }
-      .clock-box { font-size: 2.6rem; }
+      .clock-box { font-size: 2.5rem; }
     }
   </style>
 </head>
@@ -730,26 +779,22 @@
       <svg class="family-svg" viewBox="0 0 320 80">
         <!-- 1. LE COUPLE AMOUREUX ENLACÉ -->
         <g fill="var(--amber)">
-          <!-- Romain : Épaules et bras qui enlace Amélie -->
           <circle cx="28" cy="22" r="8"/>
           <path d="M20 18 c0-4 4-7 9-7 c4 0 7 2 8 5 c-2 1-5 1-7 2 c-3 1-6 2-7 4 c-2 0-3-2-3-4 z"/>
           <path d="M33 22 c2 1 3 2 3 3 c-1 1-3 1-3 1 z"/>
           <path d="M14 58 c0-12 6-22 17-24 c4 3 8 3 12 0 c2 1 4 2 6 3 c-1 7-4 13-6 21 z"/>
           <path d="M43 37 c5 1 12 4 15 9 c-2 3-5 3-8 1 c-3-2-5-5-7-7 z"/>
 
-          <!-- Amélie : Tête contre lui et longue chevelure -->
           <circle cx="48" cy="24" r="7.5"/>
           <path d="M44 24 c-2 0-3 1-3 2 c1 1 3 0 3-2 z"/>
           <path d="M44 17 c4-3 9-2 12 1 c3 3 4 8 3 13 c-1 7 0 15 2 21 c-2 2-5 3-6 0 c-2-8-2-15-1-20 c-2 0-4-3-6-6 c-3-3-4-6-4-9 z"/>
           <path d="M37 58 c2-8 5-14 8-18 c3 1 6 1 8 3 c-2 4-4 9-4 15 z"/>
 
-          <!-- Cœur qui bat en rythme continu -->
           <g class="heart-anim">
             <path d="M38 9 c-2-3-6-2-6 1 c0 4 6 7 6 7 s6-3 6-7 c0-3-4-4-6-1 z"/>
           </g>
         </g>
 
-        <!-- SÉPARATEUR DISCRET -->
         <line x1="72" y1="18" x2="72" y2="58" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="2 3"/>
 
         <!-- 2. L'ÉPAGNEUL BRETON -->
@@ -776,7 +821,7 @@
           <path d="M143 64 c-2-4-1-8 2-11 c-1 4 0 8 2 10 z"/>
         </g>
 
-        <!-- 4. LE CHAT AVEC QUEUE EN MOUVEMENT -->
+        <!-- 4. LE CHAT -->
         <g fill="var(--amber)">
           <circle cx="192" cy="46" r="6"/>
           <path d="M187 42 l-3-7 l6 3 z"/>
@@ -785,14 +830,17 @@
           <circle cx="195" cy="45" r="0.9" fill="var(--bg)"/>
           <path d="M186 52 c-4 3-5 8-5 13 c0 3 3 5 6 5 h10 c1 0 2-1 2-2 v-7 c0-4-2-7-5-9 z"/>
           <path d="M194 56 v14 h-2.5 v-14 z"/>
-          <!-- Queue qui ondule doucement -->
           <path class="cat-tail" d="M180 67 c-4 0-7-4-7-8 c0-5 4-8 7-11 c-2 3-4 6-4 9 c0 4 2 7 5 7 z"/>
         </g>
       </svg>
 
       <div class="title-area">
         <h1 class="serif" id="main-title">Notre cocon</h1>
-        <p id="full-date"></p>
+        <div class="meta-sub-row">
+          <span id="full-date" style="text-transform: capitalize;"></span>
+          <span class="meta-pill-love" id="couple-counter">❤️ Ensemble depuis...</span>
+          <span class="meta-pill-moon" id="moon-phase-tag">🌙 ...</span>
+        </div>
       </div>
     </div>
 
@@ -806,7 +854,6 @@
         </button>
       </div>
 
-      <!-- HORLOGE PLUS GROSSE ET PULSANTE -->
       <div class="serif clock-box" id="btn-theme-trigger" title="Changer l'ambiance visuelle">
         <span id="clk-h">00</span><span class="clock-dots">:</span><span id="clk-m">00</span>
       </div>
@@ -826,7 +873,10 @@
       <div class="card">
         <div class="card-head">
           <h2 class="serif">🍽️ Recettes Jow de la semaine</h2>
-          <button class="btn-action" id="btn-open-modal">📥 Importer Jow</button>
+          <div class="head-actions-wrap">
+            <button class="btn-dice" id="btn-random-dish" title="Choisir un plat au hasard pour ce soir">🎲 Tirer au sort</button>
+            <button class="btn-action" id="btn-open-modal">📥 Importer Jow</button>
+          </div>
         </div>
         <div class="jow-list" id="jow-list">
           <div style="color:var(--muted); font-size:0.9rem;">Chargement des recettes…</div>
@@ -834,7 +884,7 @@
       </div>
 
       <!-- ENCART MOTS DOUX -->
-      <div class="card" style="padding: 14px;">
+      <div class="card" style="padding: 12px 14px;">
         <div class="love-card" id="love-card-trigger">
           <span class="love-icon" id="love-icon-el">💌</span>
           <div class="love-text-preview" id="love-preview-box">
@@ -962,7 +1012,6 @@
     </div>
   </div>
 
-  <!-- Pastille de statut réseau -->
   <div id="sync-status" title="Synchronisation active"></div>
 
   <script type="module">
@@ -994,7 +1043,91 @@
     });
 
     /* ========================================================
-       GESTION DU THÈME
+       1. DÉCOMPTE DE JOURS EN COUPLE (DEPUIS LE 22/06/2026)
+       ======================================================== */
+    const START_DATE = new Date(2026, 5, 22); // Mois 5 = Juin en JS
+    function updateCoupleCounter(now) {
+      const diffTime = now.getTime() - START_DATE.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const counterEl = document.getElementById('couple-counter');
+      if (diffDays >= 0) {
+        counterEl.textContent = `❤️ Ensemble depuis ${diffDays} jour${diffDays > 1 ? 's' : ''}`;
+      } else {
+        counterEl.textContent = `❤️ Romain & Amélie`;
+      }
+    }
+
+    /* ========================================================
+       2. PHASE DE LA LUNE (CALCUL ASTRONOMIQUE PUR JS)
+       ======================================================== */
+    function getMoonPhase(date) {
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+
+      if (month < 3) {
+        year--;
+        month += 12;
+      }
+      let c = 365.25 * year;
+      let e = 30.6 * month;
+      let jd = c + e + day - 694039.09;
+      jd /= 29.5305882;
+      let b = parseInt(jd);
+      jd -= b;
+      let phase = Math.round(jd * 8);
+      if (phase >= 8) phase = 0;
+
+      const phases = [
+        { name: "Nouvelle lune", icon: "🌑" },
+        { name: "Premier croissant", icon: "🌒" },
+        { name: "Premier quartier", icon: "🌓" },
+        { name: "Gibbeuse croissante", icon: "🌔" },
+        { name: "Pleine lune", icon: "🌕" },
+        { name: "Gibbeuse décroissante", icon: "🌖" },
+        { name: "Dernier quartier", icon: "🌗" },
+        { name: "Dernier croissant", icon: "🌘" }
+      ];
+      return phases[phase];
+    }
+
+    function updateMoonPhase(now) {
+      const moon = getMoonPhase(now);
+      document.getElementById('moon-phase-tag').textContent = `${moon.icon} ${moon.name}`;
+    }
+
+    /* ========================================================
+       3. MODE NUIT AUTOMATIQUE (23h30 - 06h30)
+       ======================================================== */
+    let nightWakeTimeout = null;
+    function checkNightMode(now) {
+      const hour = now.getHours();
+      const min = now.getMinutes();
+      const totalMins = hour * 60 + min;
+
+      // 23h30 = 1410 min | 06h30 = 390 min
+      const isNight = totalMins >= 1410 || totalMins < 390;
+
+      if (isNight) {
+        document.body.classList.add('night-dim');
+      } else {
+        document.body.classList.remove('night-dim', 'night-wake');
+      }
+    }
+
+    // Réveil temporaire de 30s au toucher la nuit
+    window.addEventListener('click', () => {
+      if (document.body.classList.contains('night-dim')) {
+        document.body.classList.add('night-wake');
+        if (nightWakeTimeout) clearTimeout(nightWakeTimeout);
+        nightWakeTimeout = setTimeout(() => {
+          document.body.classList.remove('night-wake');
+        }, 30000);
+      }
+    });
+
+    /* ========================================================
+       4. GESTION DU THÈME HALLOWEEN / ORIGINAL
        ======================================================== */
     let currentTheme = localStorage.getItem('cocon_theme') || 'default';
 
@@ -1113,8 +1246,11 @@
       
       document.getElementById('clk-h').textContent = h;
       document.getElementById('clk-m').textContent = m;
-      document.getElementById('full-date').textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('full-date').textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 
+      updateCoupleCounter(now);
+      updateMoonPhase(now);
+      checkNightMode(now);
       checkTrash(now);
       checkMedAlert(now);
       checkWeekChanged(now);
@@ -1286,6 +1422,7 @@
       indexedRecipes.forEach(rec => {
         const item = document.createElement('div');
         item.className = 'jow-item' + (rec.done ? ' done' : '');
+        item.id = `dish-item-${rec.originalIndex}`;
         item.addEventListener('click', () => {
           const newDone = !rec.done;
           if (newDone) triggerFullScreenFX('jow');
@@ -1308,6 +1445,30 @@
         list.appendChild(item);
       });
     }
+
+    /* 5. SÉLECTION ALÉATOIRE D'UN PLAT DU SOIR */
+    document.getElementById('btn-random-dish').addEventListener('click', () => {
+      const unDoneList = jowRecipes
+        .map((r, i) => ({ ...r, idx: i }))
+        .filter(r => !r.done);
+
+      if (!unDoneList.length) {
+        alert("Toutes les recettes ont déjà été cuisinées ! 👏");
+        return;
+      }
+
+      // Nettoyage visuel préalable
+      document.querySelectorAll('.jow-item').forEach(el => el.classList.remove('picked-dish'));
+
+      // Choix aléatoire
+      const picked = unDoneList[Math.floor(Math.random() * unDoneList.length)];
+      const targetEl = document.getElementById(`dish-item-${picked.idx}`);
+
+      if (targetEl) {
+        targetEl.classList.add('picked-dish');
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
 
     /* GESTION DES MOTS DOUX */
     let allNotes = {};
